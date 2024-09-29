@@ -1,0 +1,26 @@
+{
+	"excelFilePath": "../Example/Doc.xlsx",
+	"paddingPerLayer": "    ",
+	"parsingExcel": 
+	{
+		"firstColumnIndex": 0,
+		"secondColumnIndex": 1,
+		"valueColumnIndex": 2,
+		"fieldsSeparator": "-"
+	},
+	"parsingFeatures":
+	[
+		{
+			"excelSheetName": "ExampleSheetName",
+			"featureName": "season",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "SeasonConfig.json"
+		},
+		{
+			"excelSheetName": "ExampleSheetName",
+			"featureName": "feature_name",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "FeatureNameConfig.json"
+		}
+	]
+}
