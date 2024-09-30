@@ -1,3 +1,9 @@
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+{
+    Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`"";
+    exit;
+}
+
 # Install pyenv
 echo "Step 1: Install penv stage"
 pip install pyenv-win --target %USERPROFILE%\\.pyenv
@@ -5,6 +11,7 @@ write-host "Istall penv finished!" -foreground green -nonewline
 echo `n
 
 # Set Envarament variables
+Write-Host "Step 2: Add Envarament variables"
 & "$PSScriptRoot/SetEnvaramentVariables.ps1"
 
 # Install Python 3.7.4
@@ -34,7 +41,6 @@ echo `n
 # Test install
 pyenv version
 
-echo `n
 echo `n
 Write-Host "Install finished" -foreground green
 
