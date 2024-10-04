@@ -55,6 +55,16 @@ class Printer:
                 value_builder.append(str(field_value_json_item.field_value))
             elif field_value_json_item.operator_type == Configuration.ValueOperatorType.Null:
                 value_builder.append("null")
+            elif field_value_json_item.operator_type == Configuration.ValueOperatorType.Bool:
+                field_value = str(field_value_json_item.field_value).lower()
+                if field_value == "true" or field_value == "1":
+                    result_value = "true"
+                elif field_value == "false" or field_value == "0":
+                    result_value = "false"
+                else:
+                    result_value = ''.join(["<error>", field_value, "</error>"])
+
+                value_builder.append(str(result_value))
             else:
                 raise Exception("".join(['Unknown operator type (', str(field_value_json_item.operator_type), ")"]))
 

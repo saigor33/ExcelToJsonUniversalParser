@@ -252,10 +252,11 @@ json-field2 | string | value
 	
 Является строкой, где ключу соответствует определённое значение `<key>:<value>`
 	
-Для парсинга сущетсвует 3 типа значений
+Для парсинга сущетсвует 4 формата данных
 1. `$str` - строка. Значение представлено в виде текста и в файле json оборачивается в кавычки
 1. `$num` - число. Значение представлено в виде числа (целого или дробного), записывается без кавычек
 1. `$null` - отсутствие значения
+1. `$bool` - логическое значиение символизирующее "да" или "нет". Значения могут быть `true` или `false`
 	
 Эти три типа операции являются конечными узлами в дереве json.
 
@@ -265,6 +266,7 @@ json-field2 | string | value
 feauture_name-field0 |		$str	  | 0
 feauture_name-field1 |		$num	  | 123
 feauture_name-field2 |		$null	  |
+feauture_name-field3 |		$bool	  | true
 
 
 Приведённый пример будет преобразован в:
@@ -272,7 +274,8 @@ feauture_name-field2 |		$null	  |
 {
 	"field0": "0",
 	"field1": 123,
-	"field2": null
+	"field2": null,
+	"field3": true
 }
 ```
 feauture_name - является самым верхним уровнем. На основе этого значения происходит группировка строк.
@@ -291,7 +294,8 @@ feauture_name - является самым верхним уровнем. На 
 	{
 		"field0": "0",
 		"field1": 123,
-		"field2": null
+		"field2": null,
+		"field3": true,
 	}
 }
 ```
@@ -311,10 +315,12 @@ feauture_name-fieldX |	  $ld   	 | {
 feauture_name-fieldX |	 field0 	 |
 feauture_name-fieldX |	 field1 	 |
 feauture_name-fieldX |	 field2 	 |
+feauture_name-fieldX |	 field3 	 |
 ||
 feauture_name-fieldX-field0 |$str  	 | 0
 feauture_name-fieldX-field1 |$num  	 | 123
 feauture_name-fieldX-field2 |$null 	 |
+feauture_name-fieldX-field3 |$bool	 | true
 
 </details>
 
@@ -450,7 +456,8 @@ feauture_name-fieldY-$arr-1-field1|$str	   | b1
         {
             "field1": "12345"
         }
-    ]
+    ],
+    "field11": false
 ]
 
 ```
@@ -560,6 +567,9 @@ season-field10-$arr-3|$ld|{|
 season-field10-$arr-3|field1|
 ||
 season-field10-$arr-3-field1|$str|12345|
+||
+season-field11|$bool|false|
+
 
 </details>
 

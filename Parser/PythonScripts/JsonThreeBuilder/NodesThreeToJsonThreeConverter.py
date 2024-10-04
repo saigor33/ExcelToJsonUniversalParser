@@ -46,4 +46,5 @@ class Converter:
     def __IsValueOperator(field_value):
         return (field_value == Configuration.ValueOperatorType.String
                 or field_value == Configuration.ValueOperatorType.Number
-                or field_value == Configuration.ValueOperatorType.Null)
+                or field_value == Configuration.ValueOperatorType.Null
+                or field_value == Configuration.ValueOperatorType.Bool)
