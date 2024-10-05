@@ -6,7 +6,7 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 # Install pyenv
 echo "Step 1: Install penv stage"
-pip install pyenv-win --target %USERPROFILE%\\.pyenv
+pip install pyenv-win --target $env:USERPROFILE\\.pyenv
 write-host "Istall penv finished!" -foreground green -nonewline
 echo `n
 
