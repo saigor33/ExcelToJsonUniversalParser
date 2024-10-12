@@ -40,6 +40,7 @@ ExcelToJsonUniversalParser - это утили для парсинга excel-ф�
 - запрашивает разрешение использования админских прав (требуется для установки модулей)
 - устанавливает pyenv
 - устанавливает python ver. 3.7.4
+- устанавливает Pip
 - устанавливает pandas ver. 1.3.5
 - устанавливает openpyxl ver 3.1.3
 - добавляет Envarament variables (на время сессии терминала PowerShell)
@@ -53,17 +54,14 @@ ExcelToJsonUniversalParser - это утили для парсинга excel-ф�
  <a name="hand-mode-install"></a>
 <summary>Ручная установка</summary>
 
-Все команды выполнять от имени администратора.
-
 Установка pyenv [Рекомендуется]:
-```
-https://github.com/pyenv-win/pyenv-win?tab=readme-ov-file#installation
-```
+
+Сайт разработчика `https://github.com/pyenv-win/pyenv-win?tab=readme-ov-file#installation`
 
 Windows (Выполнить в PowerShell): 
 
 ```
-pip install pyenv-win --target %USERPROFILE%\\.pyenv
+Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile <путь сохранения файла install-pyenv-win.ps1>; &<путь к сохранённому файлу install-pyenv-win.ps1>;
 ```
 В случае возникновения ошибки `... .ps1 cannot be loaded because running scripts is disabled on this system. ...` выполнить
 ```
@@ -111,7 +109,7 @@ pyenv version
 <details>
 <summary>Автоматизированное выполнение</summary>
 
-В выкаченном репозитории найти файл `Install.ps1` и запусть через PowerShell (ПКМ -> Запустить через PowerShell)
+В выкаченном репозитории найти файл `RunParse.ps1` и запусть через PowerShell (ПКМ -> Запустить через PowerShell)
 
 Скрипт делает следующее: 
 - добавляет Envarament variables (на время сессии терминала PowerShell)
