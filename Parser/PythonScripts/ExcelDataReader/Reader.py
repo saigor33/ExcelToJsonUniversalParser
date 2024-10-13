@@ -21,7 +21,7 @@ class Reader:
                 parsed_excel_rows_by_feature_name[feature_name] = []
 
             for index, row in excel_sheet_data_frame.iterrows():
-                root_field_full_name = str(row.iloc[self.__parsing_excel_config.first_column_index])
+                root_field_full_name = str(row.iloc[self.__parsing_excel_config.root_field_full_name_column_index])
 
                 split_field_names = root_field_full_name.split(self.__parsing_excel_config.fields_separator)
                 if len(split_field_names) > 0:

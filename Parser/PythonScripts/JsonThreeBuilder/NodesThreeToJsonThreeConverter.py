@@ -21,7 +21,7 @@ class Converter:
                 field_value = node.field_row.original_excel_row.iloc[self.__parsing_excel_config.value_column_index]
                 return FieldValueJsonItem(field_name, operator_type, field_value)
             else:
-                field_name = node.field_row.original_excel_row.iloc[self.__parsing_excel_config.second_column_index]
+                field_name = node.field_row.original_excel_row.iloc[self.__parsing_excel_config.field_name_column_index]
                 return ObjectJsonItem(field_name, None, [])
         else:
             node_field_name = node.field_name

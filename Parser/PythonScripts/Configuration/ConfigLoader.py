@@ -44,9 +44,9 @@ class ConfigLoader:
     @staticmethod
     def __LoadParsingExcelConfig(config_json):
         parsing_excel_part_json = config_json['parsingExcel']
-        first_column_index = parsing_excel_part_json['firstColumnIndex']
-        second_column_index = parsing_excel_part_json['secondColumnIndex']
+        root_field_full_name_column_index = parsing_excel_part_json['rootFieldFullNameColumnIndex']
+        field_name_column_index = parsing_excel_part_json['fieldNameColumnIndex']
         value_column_index = parsing_excel_part_json['valueColumnIndex']
         fields_separator = parsing_excel_part_json['fieldsSeparator']
 
-        return Config.ParsingExcel(first_column_index, second_column_index, value_column_index, fields_separator)
+        return Config.ParsingExcel(root_field_full_name_column_index, field_name_column_index, value_column_index, fields_separator)
