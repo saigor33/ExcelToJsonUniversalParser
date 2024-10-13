@@ -7,7 +7,7 @@ if(-not(Test-Path -Path $installationSubScriptsPath))
 }
 
 # Install pyenv
-echo "Step 1: Install penv stage"
+Write-Host "Step 1: Install penv stage"
 $installPyenvFilePath = $installationSubScriptsPath +"install-pyenv-win.ps1"
 Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile $installPyenvFilePath
 &$installPyenvFilePath
