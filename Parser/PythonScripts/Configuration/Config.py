@@ -1,8 +1,9 @@
 class Config:
     class ParsingExcel:
-        def __init__(self, first_column_index, second_column_index, value_column_index, fields_separator):
-            self.first_column_index = first_column_index
-            self.second_column_index = second_column_index
+        def __init__(self, root_field_full_name_column_index, field_name_column_index, value_column_index,
+                     fields_separator):
+            self.root_field_full_name_column_index = root_field_full_name_column_index
+            self.field_name_column_index = field_name_column_index
             self.value_column_index = value_column_index
             self.fields_separator = fields_separator
 

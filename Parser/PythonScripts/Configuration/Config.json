@@ -3,8 +3,8 @@
 	"paddingPerLayer": "    ",
 	"parsingExcel": 
 	{
-		"firstColumnIndex": 0,
-		"secondColumnIndex": 1,
+		"rootFieldFullNameColumnIndex": 0,
+		"fieldNameColumnIndex": 1,
 		"valueColumnIndex": 2,
 		"fieldsSeparator": "-"
 	},

@@ -21,7 +21,7 @@ class Builder:
         nodes = []
 
         for field_row in field_rows:
-            field_name = str(field_row.original_excel_row.iloc[self.__parsing_excel_config.second_column_index])
+            field_name = str(field_row.original_excel_row.iloc[self.__parsing_excel_config.field_name_column_index])
             full_field_name = self.__parsing_excel_config.fields_separator.join([root_field_name, field_name])
 
             inner_nodes = None
