@@ -1,3 +1,4 @@
+import argparse
 import ExcelDataReader.Reader
 import JsonItemsPrinter.Printer
 import JsonThreeBuilder.Builder
@@ -20,14 +21,14 @@ def GroupFeatureNamesByExcelSheetName(config):
     return result
 
 
-def main():
+def main(config_file_path: str):
     delimiter_preset_configs = \
         {
             '[': DelimiterPresetConfig('[', ']'),
             '{': DelimiterPresetConfig('{', '}')
         }
 
-    config = ConfigLoader("Configuration/Config.json").Load()
+    config = ConfigLoader(config_file_path).Load()
 
     excel_data_reader = ExcelDataReader.Reader.Reader(config.parsing_excel_config, config.excel_file_path)
 
@@ -51,4 +52,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Excel to Json universal parser')
+    parser.add_argument('--config_path',
+                        required=True,
+                        type=str,
+                        help='Path to config.json')
+    args = parser.parse_args()
+
+    main(args.config_path)
