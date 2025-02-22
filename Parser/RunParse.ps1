@@ -8,4 +8,6 @@ echo `n
 cd .\PythonScripts
 python .\main.py --config_path $json_config_file_path
 
+cd ..
+
 pause
