@@ -1,5 +1,6 @@
 from Configuration.Config import Config
 from JsonThreeBuilder.Node import Node
+from JsonThreeBuilder.NodeValues.ParsedExcelRowNodeValue import ParsedExcelRowNodeValue
 
 
 class Builder:
@@ -30,7 +31,8 @@ class Builder:
                 grouped_rows_by_root_field_name.pop(full_field_name)
                 inner_nodes = self.__Join(full_field_name, inner_field_rows, grouped_rows_by_root_field_name)
 
-            nodes.append(Node(field_name, field_row, inner_nodes))
+            node_value = ParsedExcelRowNodeValue(field_row, self.__parsing_excel_config.value_column_index)
+            nodes.append(Node(field_name, node_value, inner_nodes))
 
         return nodes
 

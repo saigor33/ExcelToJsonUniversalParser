@@ -7,7 +7,9 @@ import JsonThreeBuilder.NodesThreeBuilder
 import JsonThreeBuilder.NodesThreeToJsonThreeConverter
 from Configuration.ConfigLoader import ConfigLoader
 from Configuration.DelimiterPresetConfig import DelimiterPresetConfig
+from ExcelDataReader.SheetValueReader import SheetValueReader
 from FeatureParser import FeatureParser
+from ReferenceFieldValueResolver import ReferenceFieldValueResolver
 
 
 def GroupFeatureNamesByExcelSheetName(config):
@@ -36,17 +38,25 @@ def main(config_file_path: str):
     nodes_three_to_json_three_converter = JsonThreeBuilder.NodesThreeToJsonThreeConverter \
         .Converter(config.parsing_excel_config, delimiter_preset_configs)
     json_nodes_joiner = JsonThreeBuilder.JsonNodesJoiner.Joiner()
+    reference_field_value_resolver = ReferenceFieldValueResolver(config.parsing_excel_config)
     json_three_builder = JsonThreeBuilder.Builder.Builder(
-        nodes_three_builder, nodes_three_to_json_three_converter, json_nodes_joiner)
+        nodes_three_builder,
+        reference_field_value_resolver,
+        nodes_three_to_json_three_converter,
+        json_nodes_joiner)
     json_items_printer = JsonItemsPrinter.Printer.Printer(config.padding_per_layer)
 
     feature_parser = FeatureParser(json_three_builder, json_items_printer)
 
     feature_names_by_excel_sheet_name = GroupFeatureNamesByExcelSheetName(config)
     parsed_excel_rows_by_feature_name = excel_data_reader.read(feature_names_by_excel_sheet_name)
-    for feature_name, parsed_excel_rows in parsed_excel_rows_by_feature_name.items():
+
+    feature_name: str
+    item: ExcelDataReader.Reader.Item
+    for feature_name, item in parsed_excel_rows_by_feature_name.items():
         parsing_feature_config = config.parsing_features_by_feature_name[feature_name]
-        feature_parser.parse(parsing_feature_config, feature_name, parsed_excel_rows)
+        sheet_value_reader = SheetValueReader(item.excel_sheet_data_frame)
+        feature_parser.parse(sheet_value_reader, parsing_feature_config, feature_name, item.getParsedExcelRows())
 
     print("\nDone!")
 
