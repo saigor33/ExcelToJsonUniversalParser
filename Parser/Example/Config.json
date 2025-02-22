@@ -21,6 +21,12 @@
 			"featureName": "feature_name",
 			"outputDirectory": "../Example/Temp/Output",
 			"outputFileName": "FeatureNameConfig.json"
+		},
+		{
+			"excelSheetName": "RepeatableArray",
+			"featureName": "root",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "RepeatableArrayConfig.json"
 		}
 	]
 }
