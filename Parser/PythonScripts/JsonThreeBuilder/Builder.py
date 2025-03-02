@@ -19,7 +19,7 @@ class Builder:
 
     def build(self, sheet_value_reader: SheetValueReader, feature_name: str, field_rows):
         node = self.__nodes_three_builder.build(feature_name, field_rows)
-        node = self.__referenceFieldValueResolver.resolve(sheet_value_reader, feature_name, node)
+        node = self.__referenceFieldValueResolver.resolve(sheet_value_reader, node)
         json_item = self.__nodes_three_to_json_three_converter.convert(feature_name, node)
 
         return self.__json_nodes_joiner.join(json_item)

@@ -16,7 +16,7 @@ class ReferenceFieldValueResolver:
     def __init__(self, parsing_excel_config):
         self.__parsing_excel_config = parsing_excel_config
 
-    def resolve(self, sheet_value_reader: SheetValueReader, feature_name, node: Node):
+    def resolve(self, sheet_value_reader: SheetValueReader, node: Node):
         return self._Resolve(sheet_value_reader, node)
 
     def _Resolve(self, sheet_value_reader: SheetValueReader, node: Node):
