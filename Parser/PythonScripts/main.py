@@ -1,5 +1,6 @@
 import argparse
-import ExcelDataReader.Reader
+import DataSources.Excel.Item
+import DataSources.Excel.Reader
 import JsonItemsPrinter.Printer
 import JsonThreeBuilder.Builder
 import JsonThreeBuilder.JsonNodesJoiner
@@ -7,13 +8,14 @@ import JsonThreeBuilder.NodesThreeBuilder
 import JsonThreeBuilder.NodesThreeToJsonThreeConverter
 from Configuration.ConfigLoader import ConfigLoader
 from Configuration.DelimiterPresetConfig import DelimiterPresetConfig
-from ExcelDataReader.SheetValueReader import SheetValueReader
+from DataSources.Excel.Item import Item
+from DataSources.Excel.SheetValueReader import SheetValueReader
 from FeatureParser import FeatureParser
 from ReferenceFieldValueResolver import ReferenceFieldValueResolver
 
 
-def GroupFeatureNamesByExcelSheetName(config):
-    result = {}
+def GroupFeatureNamesByExcelSheetName(config) -> dict[str, list[str]]:
+    result: dict[str, list[str]] = {}
     for feature_name, parsing_feature_config in config.parsing_features_by_feature_name.items():
         if parsing_feature_config.excel_sheet_name not in result:
             result[parsing_feature_config.excel_sheet_name] = []
@@ -24,7 +26,7 @@ def GroupFeatureNamesByExcelSheetName(config):
 
 
 def main(config_file_path: str):
-    delimiter_preset_configs = \
+    delimiter_preset_configs: dict[str, DelimiterPresetConfig] = \
         {
             '[': DelimiterPresetConfig('[', ']'),
             '{': DelimiterPresetConfig('{', '}')
@@ -32,7 +34,7 @@ def main(config_file_path: str):
 
     config = ConfigLoader(config_file_path).Load()
 
-    excel_data_reader = ExcelDataReader.Reader.Reader(config.parsing_excel_config, config.excel_file_path)
+    excel_data_reader = DataSources.Excel.Reader.Reader(config.parsing_excel_config, config.excel_file_path)
 
     nodes_three_builder = JsonThreeBuilder.NodesThreeBuilder.Builder(config.parsing_excel_config)
     nodes_three_to_json_three_converter = JsonThreeBuilder.NodesThreeToJsonThreeConverter \
@@ -48,15 +50,15 @@ def main(config_file_path: str):
 
     feature_parser = FeatureParser(json_three_builder, json_items_printer)
 
-    feature_names_by_excel_sheet_name = GroupFeatureNamesByExcelSheetName(config)
-    parsed_excel_rows_by_feature_name = excel_data_reader.read(feature_names_by_excel_sheet_name)
+    feature_names_by_excel_sheet_name: dict[str, list[str]] = GroupFeatureNamesByExcelSheetName(config)
+    parsed_items_by_feature_name: dict[str, Item] = excel_data_reader.read(feature_names_by_excel_sheet_name)
 
     feature_name: str
-    item: ExcelDataReader.Reader.Item
-    for feature_name, item in parsed_excel_rows_by_feature_name.items():
+    item: DataSources.Excel.Item.Item
+    for feature_name, item in parsed_items_by_feature_name.items():
         parsing_feature_config = config.parsing_features_by_feature_name[feature_name]
         sheet_value_reader = SheetValueReader(item.excel_sheet_data_frame)
-        feature_parser.parse(sheet_value_reader, parsing_feature_config, feature_name, item.getParsedExcelRows())
+        feature_parser.parse(sheet_value_reader, parsing_feature_config, feature_name, item.getParsedDataItem())
 
     print("\nDone!")
 

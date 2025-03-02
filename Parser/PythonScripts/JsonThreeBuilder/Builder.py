@@ -1,8 +1,10 @@
 import JsonThreeBuilder.JsonNodesJoiner
 import JsonThreeBuilder.NodesThreeToJsonThreeConverter
 import JsonThreeBuilder.NodesThreeBuilder
-from ExcelDataReader.ParsedExcelRow import ParsedExcelRow
-from ExcelDataReader.SheetValueReader import SheetValueReader
+from DataSources.ParsedDataItem import ParsedDataItem
+from DataSources.Excel.SheetValueReader import SheetValueReader
+from JsonItemsPrinter.JsonItems.BaseJsonItem import BaseJsonItem
+from JsonThreeBuilder.Node import Node
 from ReferenceFieldValueResolver import ReferenceFieldValueResolver
 
 
@@ -17,9 +19,9 @@ class Builder:
         self.__nodes_three_builder = nodes_three_builder
         self.__nodes_three_to_json_three_converter = nodes_three_to_json_three_converter
 
-    def build(self, sheet_value_reader: SheetValueReader, feature_name: str, field_rows):
-        node = self.__nodes_three_builder.build(feature_name, field_rows)
-        node = self.__referenceFieldValueResolver.resolve(sheet_value_reader, node)
-        json_item = self.__nodes_three_to_json_three_converter.convert(feature_name, node)
+    def build(self, sheet_value_reader: SheetValueReader, feature_name: str, parsed_data_items: list[ParsedDataItem]):
+        node: Node = self.__nodes_three_builder.build(feature_name, parsed_data_items)
+        node: Node = self.__referenceFieldValueResolver.resolve(sheet_value_reader, node)
+        json_item: BaseJsonItem = self.__nodes_three_to_json_three_converter.convert(feature_name, node)
 
         return self.__json_nodes_joiner.join(json_item)

@@ -1,11 +1,12 @@
-from ExcelDataReader.ParsedExcelRow import ParsedExcelRow
+from DataSources.ParsedDataItem import ParsedDataItem
 from JsonThreeBuilder.NodeValues.BaseNodeValue import BaseNodeValue
 
 
 class ParsedExcelRowNodeValue(BaseNodeValue):
-    def __init__(self, field_row: ParsedExcelRow, column_index: int):
-        self.__field_row = field_row
-        self.__column_index = column_index
+    __parsed_data_item: ParsedDataItem
+
+    def __init__(self, parsed_data_item: ParsedDataItem):
+        self.__parsed_data_item = parsed_data_item
 
     def get(self):
-        return self.__field_row.original_excel_row.iloc[self.__column_index]
+        return self.__parsed_data_item.field_value
