@@ -1,20 +1,23 @@
+from typing import Optional
 import Configuration.JsonOperatorType
 import Configuration.ValueOperatorType
 from Configuration.Config import Config
+from Configuration.DelimiterPresetConfig import DelimiterPresetConfig
+from JsonItemsPrinter.JsonItems.BaseJsonItem import BaseJsonItem
 from JsonItemsPrinter.JsonItems.ObjectJsonItem import ObjectJsonItem
 from JsonItemsPrinter.JsonItems.FieldValueJsonItem import FieldValueJsonItem
 from JsonThreeBuilder.Node import Node
 
 
 class Converter:
-    def __init__(self, parsing_excel_config: Config.ParsingExcel, delimiter_presets):
+    def __init__(self, parsing_excel_config: Config.ParsingExcel, delimiter_presets: dict[str, DelimiterPresetConfig]):
         self.__parsing_excel_config = parsing_excel_config
         self.__delimiter_presets = delimiter_presets
 
-    def convert(self, feature_name: str, node: Node):
+    def convert(self, feature_name: str, node: Node) -> BaseJsonItem:
         return self.__ConvertToJsonItem(feature_name, node)
 
-    def __ConvertToJsonItem(self, root_field_name: str, node: Node):
+    def __ConvertToJsonItem(self, root_field_name: str, node: Node) -> BaseJsonItem:
         if node.nodes is None:
             if self.__IsValueOperator(node.field_name):
                 field_name = root_field_name
@@ -26,8 +29,8 @@ class Converter:
                 return ObjectJsonItem(field_name, None, [])
         else:
             node_field_name = node.field_name
-            delimiter_preset = None
-            inner_json_items = []
+            delimiter_preset: Optional[DelimiterPresetConfig] = None
+            inner_json_items: list[BaseJsonItem] = []
 
             inner_node: Node
             for inner_node in node.nodes:
@@ -44,7 +47,7 @@ class Converter:
         return ObjectJsonItem(node_field_name, delimiter_preset, inner_json_items)
 
     @staticmethod
-    def __IsValueOperator(field_value: str):
+    def __IsValueOperator(field_value: str) -> bool:
         return (field_value == Configuration.ValueOperatorType.String
                 or field_value == Configuration.ValueOperatorType.Number
                 or field_value == Configuration.ValueOperatorType.Null

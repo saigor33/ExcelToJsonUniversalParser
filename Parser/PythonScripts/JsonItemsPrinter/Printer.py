@@ -1,4 +1,5 @@
 import Configuration.ValueOperatorType
+from JsonItemsPrinter.JsonItems.BaseJsonItem import BaseJsonItem
 from JsonItemsPrinter.JsonItems.FieldValueJsonItem import FieldValueJsonItem
 from JsonItemsPrinter.JsonItems.ObjectJsonItem import ObjectJsonItem
 
@@ -7,15 +8,15 @@ class Printer:
     def __init__(self, padding_per_layer):
         self.__padding_per_layer = padding_per_layer
 
-    def print(self, json_item):
+    def print(self, json_item: BaseJsonItem):
         layer_index = 0
         need_comma = False
         self.__ParseInternal(json_item, layer_index, need_comma)
 
-    def __ParseInternal(self, json_item, layer_index, need_comma):
+    def __ParseInternal(self, json_item: BaseJsonItem, layer_index: int, need_comma: bool):
         json_item_type = type(json_item)
         if json_item_type is ObjectJsonItem:
-            object_json_item = json_item
+            object_json_item: ObjectJsonItem = json_item
 
             # 1. root item is not has field name
             # 2. array elements does`t has field name
@@ -27,7 +28,7 @@ class Printer:
 
             inner_object_json_items_count = len(object_json_item.json_items)
             for i in range(inner_object_json_items_count):
-                inner_json_item = object_json_item.json_items[i]
+                inner_json_item: BaseJsonItem = object_json_item.json_items[i]
                 inner_object_need_comma = i != inner_object_json_items_count - 1
                 next_layer_index = layer_index + 1
                 self.__ParseInternal(inner_json_item, next_layer_index, inner_object_need_comma)
@@ -38,8 +39,8 @@ class Printer:
                     [self.__padding_per_layer * layer_index, object_json_item.delimiter_preset.closing_part, comma]))
         elif json_item_type is FieldValueJsonItem:
 
-            field_value_json_item = json_item
-            value_builder = []
+            field_value_json_item: FieldValueJsonItem = json_item
+            value_builder: list[str] = []
             value_builder.append(self.__padding_per_layer * layer_index)
             if field_value_json_item.field_name is not None:
                 value_builder.append("\"")

@@ -1,25 +1,28 @@
+from typing import Type
+
 import Configuration.ValueOperatorType
 import Configuration.JsonOperatorType
+from JsonItemsPrinter.JsonItems.BaseJsonItem import BaseJsonItem
 from JsonItemsPrinter.JsonItems.ObjectJsonItem import ObjectJsonItem
 from JsonItemsPrinter.JsonItems.FieldValueJsonItem import FieldValueJsonItem
 
 
 class Joiner:
-    def join(self, json_item):
+    def join(self, json_item: BaseJsonItem) -> BaseJsonItem:
         self.__JoinArraysJsonItems(json_item)
         json_item = self.__JoinFieldValueOperatorJsonItems(json_item)
         json_item.field_name = None  # hide feature name in result
 
         return json_item
 
-    def __JoinFieldValueOperatorJsonItems(self, json_item):
-        json_item_type = type(json_item)
+    def __JoinFieldValueOperatorJsonItems(self, json_item: BaseJsonItem) -> BaseJsonItem:
+        json_item_type: Type[BaseJsonItem] = type(json_item)
         if json_item_type is ObjectJsonItem:
             # all FieldValueJsonItem wrap object field
-            object_json_item = json_item
+            object_json_item: ObjectJsonItem = json_item
             inner_json_items_count = len(object_json_item.json_items)
             if len(object_json_item.json_items) == 1:
-                inner_json_item = object_json_item.json_items[0]
+                inner_json_item: BaseJsonItem = object_json_item.json_items[0]
 
                 inner_json_item_type = type(inner_json_item)
                 if inner_json_item_type is FieldValueJsonItem:

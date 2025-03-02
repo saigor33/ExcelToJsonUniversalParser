@@ -3,13 +3,16 @@ import sys
 import JsonItemsPrinter.Printer
 import JsonThreeBuilder.Builder
 from Configuration.Config import Config
-from ExcelDataReader.SheetValueReader import SheetValueReader
+from DataSources.ParsedDataItem import ParsedDataItem
+from DataSources.Excel.SheetValueReader import SheetValueReader
 
 
 class FeatureParser:
-    def __init__(self,
-                 json_three_converter: JsonThreeBuilder.Builder.Builder,
-                 json_items_printer: JsonItemsPrinter.Printer):
+    def __init__(
+            self,
+            json_three_converter: JsonThreeBuilder.Builder.Builder,
+            json_items_printer: JsonItemsPrinter.Printer
+    ):
         self.__json_three_converter = json_three_converter
         self.__json_items_printer = json_items_printer
 
@@ -18,7 +21,7 @@ class FeatureParser:
             sheet_value_reader: SheetValueReader,
             parsing_feature_config: Config.ParsingFeature,
             feature_name: str,
-            parsed_excel_rows
+            parsed_data_items: list[ParsedDataItem]
     ):
         if not os.path.exists(parsing_feature_config.output_directory):
             os.makedirs(parsing_feature_config.output_directory)
@@ -29,7 +32,7 @@ class FeatureParser:
         output_file = open(output_file_path, 'w')
         sys.stdout = output_file
 
-        json_item = self.__json_three_converter.build(sheet_value_reader, feature_name, parsed_excel_rows)
+        json_item = self.__json_three_converter.build(sheet_value_reader, feature_name, parsed_data_items)
         self.__json_items_printer.print(json_item)
 
         sys.stdout = orig_stdout
