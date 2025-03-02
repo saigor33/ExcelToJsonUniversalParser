@@ -29,16 +29,14 @@ class ReferenceFieldValueResolver:
                 if inner_node.nodes is None:
                     inner_nodes.append(self._Resolve(sheet_value_reader, inner_node))
                 else:
-                    if len(inner_node.nodes) == 1:
-                        if inner_node.nodes[0].field_name == Configuration.ValueOperatorType.RepeatableNode:
-                            repeatable_node = inner_node.nodes[0]
-                            self._ValidateRepeatableLayer(repeatable_node)
-                            repeatable_rows_range = self._GetRepeatableRowsRange(repeatable_node)
-                            repeatable_values_inner_node = self._GetRepeatableValuesNode(repeatable_node)
-                            repeated_nodes = self._RepeatNodes(sheet_value_reader, repeatable_values_inner_node,
-                                                               repeatable_rows_range)
-
-                            inner_nodes.extend(repeated_nodes)
+                    repeatable_node: Node = self._FindRepeatableNode(inner_node)
+                    if repeatable_node is not None:
+                        self._ValidateRepeatableLayer(repeatable_node)
+                        repeatable_rows_range = self._GetRepeatableRowsRange(repeatable_node)
+                        repeatable_values_inner_node = self._GetRepeatableValuesNode(repeatable_node)
+                        repeated_nodes = self._RepeatNodes(sheet_value_reader, repeatable_values_inner_node,
+                                                           repeatable_rows_range)
+                        inner_nodes.extend(repeated_nodes)
                     else:
                         inner_nodes.append(self._Resolve(sheet_value_reader, inner_node))
 
@@ -87,6 +85,15 @@ class ReferenceFieldValueResolver:
                     repeated_inner_nodes.append(repeated_inner_node)
 
             return Node(field_name, node_value, repeated_inner_nodes)
+
+    @staticmethod
+    def _FindRepeatableNode(inner_node):
+        if len(inner_node.nodes) != 1:
+            return None
+        if inner_node.nodes[0].field_name != Configuration.ValueOperatorType.RepeatableNode:
+            return None
+
+        return inner_node.nodes[0]
 
     @staticmethod
     def ResolveReferenceNode(read_from_excel_node_value_factory: ReadFromExcelNodeValueFactory, node: Node):
