@@ -1,0 +1,27 @@
+{
+	"excelFilePath": "../Example/Doc.xlsx",
+	"paddingPerLayer": "    ",
+	"parsingExcel": 
+	{
+		"startParsingRowIndex": 3,
+		"ignoreColumnIndex": 1,
+		"linkIdColumnIndex": 2,
+		"fieldNameColumnIndex":3,
+		"fieldValueTypeColumnIndex":4,
+		"fieldValueColumnIndex":5,
+		"orderedByLevelSheetNames":
+		[
+			"Lvl0",
+			"Lvl1",
+			"Lvl2"
+		]
+	},
+	"parsingFeatures":
+	[
+		{
+			"featureName": "season",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "SeasonConfig.json"
+		}
+	]
+}
