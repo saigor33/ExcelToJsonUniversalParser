@@ -8,4 +8,9 @@ $env:Path = $pyenv_bin_path + $env:Path
 $env:Path = $pyenv_shims_path + $env:Path 
 
 write-host "Envarament variables added" -foreground green -nonewline
+
+pyenv global 3.9.11
+
+write-host "Python version 3.9.11 set" -foreground green -nonewline
+
 echo `n
