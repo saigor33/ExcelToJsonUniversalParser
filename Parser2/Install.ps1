@@ -61,6 +61,18 @@ pip install openpyxl==3.1.3
 Write-Host "Python module `"openpyxl`" installed" -foreground green -nonewline
 echo `n
 
+# Setup PrettyTable
+Write-Host "Step 9: Install python module `"PrettyTable`" v.3.15.1"
+pip install prettytable==3.15.1
+Write-Host "Python module `"PrettyTable`" installed" -foreground green -nonewline
+echo `n
+
+# Setup PrettyTable
+Write-Host "Step 9: Install python module `"colorama`" v.0.4.6"
+pip install colorama==0.4.6
+Write-Host "Python module `"colorama`" installed" -foreground green -nonewline
+echo `n
+
 # Test install
 pyenv version
 

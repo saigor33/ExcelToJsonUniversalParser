@@ -1,6 +1,8 @@
 import argparse
 from typing import Dict, List
 
+import colorama
+
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
@@ -18,6 +20,8 @@ from Sources.Excel.Reader.Row import Row
 
 
 def main(config_file_path: str):
+    colorama.init()
+
     config: Config = ConfigLoader(config_file_path).Load()
 
     excel_reader = Reader(config)
@@ -29,7 +33,7 @@ def main(config_file_path: str):
 
     nodes_by_sheet_name: dict[str, list[Node]] = {}
     for sheet_name, rows in rows_by_sheet_name.items():
-        nodes_by_sheet_name[sheet_name] = converter.convert(rows)
+        nodes_by_sheet_name[sheet_name] = converter.convert(sheet_name, rows)
 
     nodes_layer: NodesLayer = NodesLayerBuilder.build(config.parsing.ordered_by_level_sheet_names, nodes_by_sheet_name)
 
