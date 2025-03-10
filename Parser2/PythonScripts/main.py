@@ -8,8 +8,7 @@ import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
 from Configuration import FieldValueType
 from Json.BaseJsonItem import ObjectJsonItem, ValueFieldJsonItem
-from RowToJsonConverter import NodesLayerBuilder
-from RowToJsonConverter.Converter import Converter
+from RowToJsonConverter import NodesLayerBuilder, Converter
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
@@ -25,7 +24,6 @@ def main(config_file_path: str):
     config: Config = ConfigLoader(config_file_path).Load()
 
     excel_reader = Reader(config)
-    converter = Converter()
     ref_nodes_joiner = RefNodesJoiner()
     json_printer = Json.Printer.Printer(config.padding_per_layer)
 
@@ -33,11 +31,11 @@ def main(config_file_path: str):
 
     nodes_by_sheet_name: dict[str, list[Node]] = {}
     for sheet_name, rows in rows_by_sheet_name.items():
-        nodes_by_sheet_name[sheet_name] = converter.convert(sheet_name, rows)
+        nodes_by_sheet_name[sheet_name] = Converter.convert(sheet_name, rows)
 
     nodes_layer: NodesLayer = NodesLayerBuilder.build(config.parsing.ordered_by_level_sheet_names, nodes_by_sheet_name)
 
-    joined_nodes_by_feature_name: dict[str, Node]  = {}
+    joined_nodes_by_feature_name: dict[str, Node] = {}
     for node in nodes_layer.nodes:
         feature_name = node.name
         if feature_name in config.parsing_features:
