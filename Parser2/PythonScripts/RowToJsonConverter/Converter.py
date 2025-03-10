@@ -46,6 +46,8 @@ class Converter:
                 # todo: add empty array without ref next sheet
                 ref_node = Node(Configuration.ReferenceType.Ref, row.field_value, [])
                 inner_nodes.append(Node(row.field_name, field_value_type, [ref_node]))
+            elif field_value_type is None:
+                pass
             else:
                 print(Fore.RED + 'Message: Covert raw to node error' + Style.RESET_ALL)
 
