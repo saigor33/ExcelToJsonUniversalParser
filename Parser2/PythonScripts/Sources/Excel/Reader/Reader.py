@@ -21,6 +21,7 @@ class Reader:
     def _ReadRows(self, excel_sheet_data_frame: pandas.DataFrame) -> list[Row]:
         result = []
 
+        index: int
         for index, excel_row in excel_sheet_data_frame.iterrows():
             ignore_cell = excel_row.iloc[self.__config.parsing.ignore_column_index]
             need_ignore_row = not self._IsEmptyCell(ignore_cell)
@@ -43,7 +44,7 @@ class Reader:
                         and field_value is None)
 
                 if not is_empty_row:
-                    result.append(Row(link_id, field_name, field_value_type, field_value))
+                    result.append(Row(index, link_id, field_name, field_value_type, field_value))
 
         return result
 

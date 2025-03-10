@@ -50,8 +50,9 @@ class Converter:
                 print(Fore.RED + 'Message: Covert raw to node error' + Style.RESET_ALL)
 
                 table = PrettyTable()
-                table.field_names = ["Sheet name", "id", "name", "type", "value"]
-                table.add_row([sheet_name, row.link_id, row.field_name, field_value_type, row.field_value])
+                table.field_names = ["Sheet name", "row index", "id", "name", "type", "value"]
+                table.add_row(
+                    [sheet_name, row.original_index, row.link_id, row.field_name, field_value_type, row.field_value])
                 error: list[str] = [
                     '\n\tDescription: Unknown "type"',
                     '\n' + str(table),
