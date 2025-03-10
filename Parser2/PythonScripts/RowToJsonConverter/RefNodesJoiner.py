@@ -19,6 +19,7 @@ class RefNodesJoiner:
         else:
             for index, inner_node in enumerate(node.inner_nodes):
                 if inner_node.inner_nodes is None:
+                    # it is not ref node. Ref node has inner
                     pass
                 elif self._IsRefNode(inner_node):
                     inner_node.inner_nodes = self._GetRefValue(inner_node, nodes_layer)
