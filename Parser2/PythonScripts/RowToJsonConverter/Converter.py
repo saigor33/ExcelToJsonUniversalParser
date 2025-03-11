@@ -40,7 +40,6 @@ def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_inde
             value_node = Node(row.field_name, None, [ref_node])
             inner_nodes.append(value_node)
         elif field_value_type == Configuration.ReferenceType.Array:
-            # todo: add empty array without ref next sheet
             ref_node = Node(Configuration.ReferenceType.Ref, row.field_value, [])
             inner_nodes.append(Node(row.field_name, field_value_type, [ref_node]))
         elif field_value_type is None:
