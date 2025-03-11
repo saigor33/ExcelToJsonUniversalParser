@@ -46,7 +46,7 @@ def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_inde
         elif field_value_type is None:
             pass
         else:
-            print(Fore.RED + 'Message: Covert raw to node error' + Style.RESET_ALL)
+            print(Fore.RED + 'Message: Convert row to node error' + Style.RESET_ALL)
 
             table = PrettyTable()
             table.field_names = ["Sheet name", "row index", "id", "name", "type", "value"]
