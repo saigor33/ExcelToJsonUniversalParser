@@ -31,11 +31,11 @@ class Reader:
                 field_value_type_cell = excel_row.iloc[self.__config.parsing.field_value_type_column_index]
                 field_value_cell = excel_row.iloc[self.__config.parsing.field_value_column_index]
 
-                link_id = str(lind_id_cell) if not self._IsEmptyCell(lind_id_cell) else None
-                field_name = str(field_name_cell) if not self._IsEmptyCell(field_name_cell) else None
-                field_value_type = str(field_value_type_cell) if not self._IsEmptyCell(
+                link_id = str(lind_id_cell).strip() if not self._IsEmptyCell(lind_id_cell) else None
+                field_name = str(field_name_cell).strip() if not self._IsEmptyCell(field_name_cell) else None
+                field_value_type = str(field_value_type_cell).strip() if not self._IsEmptyCell(
                     field_value_type_cell) else None
-                field_value = str(field_value_cell) if not self._IsEmptyCell(field_value_cell) else None
+                field_value = str(field_value_cell).strip() if not self._IsEmptyCell(field_value_cell) else None
 
                 is_empty_row = (
                         link_id is None
