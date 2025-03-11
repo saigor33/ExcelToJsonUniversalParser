@@ -50,8 +50,10 @@ def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_inde
 
             table = PrettyTable()
             table.field_names = ["Sheet name", "row index", "id", "name", "type", "value"]
+            highlighted_field_value_type = Fore.RED + field_value_type + Style.RESET_ALL
             table.add_row(
-                [sheet_name, row.original_index, row.link_id, row.field_name, field_value_type, row.field_value])
+                [sheet_name, row.original_index, row.link_id, row.field_name, highlighted_field_value_type,
+                 row.field_value])
             error: list[str] = [
                 '\n\tDescription: Unknown "type"',
                 '\n' + str(table),
