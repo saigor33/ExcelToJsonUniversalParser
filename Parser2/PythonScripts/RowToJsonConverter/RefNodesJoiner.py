@@ -1,4 +1,5 @@
-from typing import Optional
+from colorama import Fore, Style
+from prettytable import PrettyTable
 
 import Configuration.ReferenceType
 from RowToJsonConverter.Node import Node
@@ -53,4 +54,16 @@ class RefNodesJoiner:
                                                                             nodes_layer.next_nodes_layer)
                 return next_layer_node.inner_nodes
 
-        raise Exception("Reference node not found", ref_node_field_name, nodes_layer.sheet_name)
+        print(Fore.RED + 'Error: Missing ref value' + Style.RESET_ALL)
+
+        table = PrettyTable()
+        table.field_names = ["Search sheet name", "id"]
+        highlighted_ref_node_field_name = Fore.RED + ref_node_field_name + Style.RESET_ALL
+        table.add_row([nodes_layer.sheet_name, highlighted_ref_node_field_name])
+        error: list[str] = [
+            '\n\tDescription: Unknown "id"',
+            '\n' + str(table),
+            '\n'
+        ]
+        print("".join(error))
+        return []
