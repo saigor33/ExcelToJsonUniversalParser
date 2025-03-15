@@ -12,10 +12,17 @@ class ConfigLoader:
 
         excel_file_path: str = config_json['excelFilePath']
         padding_per_layer: str = config_json['paddingPerLayer']
-        parsing_excel_config: Config.Parsing = self.__LoadParsingExcelConfig(config_json)
+
+        parsing_excel_part_json = config_json['parsingExcel']
+        parsing_excel_config: Config.Parsing = self.__LoadParsingExcelConfig(parsing_excel_part_json)
+
+        parsing_alias_funcs_part_json = config_json['parsingAliasFuncs']
+        parsing_alias_funcs_config: Config.Parsing = self.__LoadParsingExcelConfig(parsing_alias_funcs_part_json)
+
         parsing_feature_configs: dict[str, Config.ParsingFeature] = self.__LoadParsingFeatureConfigs(config_json)
 
-        return Config(excel_file_path, padding_per_layer, parsing_excel_config, parsing_feature_configs)
+        return Config(excel_file_path, padding_per_layer, parsing_excel_config, parsing_alias_funcs_config,
+                      parsing_feature_configs)
 
     def __LoadJson(self):
         json_file = open(self.__config_file_path, "r")
@@ -43,15 +50,21 @@ class ConfigLoader:
 
     @staticmethod
     def __LoadParsingExcelConfig(config_json) -> Config.Parsing:
-        parsing_excel_part_json = config_json['parsingExcel']
-        start_parsing_row_index = int(parsing_excel_part_json['startParsingRowIndex'])
-        ignore_column_index = int(parsing_excel_part_json['ignoreColumnIndex'])
-        link_id_column_index = int(parsing_excel_part_json['linkIdColumnIndex'])
-        field_name_column_index = int(parsing_excel_part_json['fieldNameColumnIndex'])
-        field_value_type_column_index = int(parsing_excel_part_json['fieldValueTypeColumnIndex'])
-        field_value_column_index = int(parsing_excel_part_json['fieldValueColumnIndex'])
-        ordered_by_level_sheet_names = parsing_excel_part_json['orderedByLevelSheetNames']
+        start_parsing_row_index = int(config_json['startParsingRowIndex'])
+        ignore_column_index = int(config_json['ignoreColumnIndex'])
+        link_id_column_index = int(config_json['linkIdColumnIndex'])
+        field_name_column_index = int(config_json['fieldNameColumnIndex'])
+        field_value_type_column_index = int(config_json['fieldValueTypeColumnIndex'])
+        field_value_column_index = int(config_json['fieldValueColumnIndex'])
+        alias_func_arg_value_column_index = int(config_json['aliasFuncArgValueColumnIndex'])
+        ordered_by_level_sheet_names = config_json['orderedByLevelSheetNames']
 
-        return Config.Parsing(start_parsing_row_index, ignore_column_index, link_id_column_index,
-                              field_name_column_index, field_value_type_column_index, field_value_column_index,
-                              ordered_by_level_sheet_names)
+        return Config.Parsing(
+            start_parsing_row_index,
+            ignore_column_index,
+            link_id_column_index,
+            field_name_column_index,
+            field_value_type_column_index,
+            field_value_column_index,
+            alias_func_arg_value_column_index,
+            ordered_by_level_sheet_names)

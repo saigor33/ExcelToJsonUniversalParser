@@ -1,6 +1,21 @@
 {
 	"excelFilePath": "../Example/Doc.xlsx",
 	"paddingPerLayer": "    ",
+	"parsingAliasFuncs":
+	{
+		"startParsingRowIndex": 3,
+		"ignoreColumnIndex": 1,
+		"linkIdColumnIndex": 2,
+		"fieldNameColumnIndex":3,
+		"fieldValueTypeColumnIndex":4,
+		"fieldValueColumnIndex":5,
+		"aliasFuncArgValueColumnIndex": 6,
+		"orderedByLevelSheetNames":
+		[
+			"AliasFuncsLvl0",
+			"AliasFuncsLvl1"
+		]
+	},
 	"parsingExcel": 
 	{
 		"startParsingRowIndex": 3,
@@ -9,6 +24,7 @@
 		"fieldNameColumnIndex":3,
 		"fieldValueTypeColumnIndex":4,
 		"fieldValueColumnIndex":5,
+		"aliasFuncArgValueColumnIndex": 6,
 		"orderedByLevelSheetNames":
 		[
 			"Lvl0",

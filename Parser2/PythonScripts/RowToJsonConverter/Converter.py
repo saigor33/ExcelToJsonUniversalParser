@@ -10,24 +10,26 @@ def convert(sheet_name: str, rows: list[Row]) -> list[Node]:
     result: list[Node] = []
 
     start_block_row_index: int = 0
+    row_index = start_block_row_index
     last_row_index = len(rows) - 1
-    for row_index in range(start_block_row_index + 1, last_row_index + 1):
-        is_block_ended = row_index == last_row_index or rows[row_index + 1].link_id is not None
-        if is_block_ended:
-            end_block_row_index: int = row_index
-
-            result.append(_CreateNode(sheet_name, rows, start_block_row_index, end_block_row_index))
-
-            start_block_row_index = end_block_row_index + 1
+    while row_index <= last_row_index:
+        if row_index == last_row_index:
+            result.append(_CreateNode(sheet_name, rows, start_block_row_index, last_row_index))
+        elif rows[row_index + 1].link_id is not None:
+            result.append(_CreateNode(sheet_name, rows, start_block_row_index, row_index))
+            start_block_row_index = row_index + 1
+        row_index += 1
 
     return result
 
 
+# todo: remove sheet name
 def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_index):
     node_name = rows[start_block_row_index].link_id
     inner_nodes: list[Node] = []
 
-    for block_row_index in range(start_block_row_index, end_block_row_index + 1):
+    block_row_index = start_block_row_index
+    while block_row_index <= end_block_row_index:
         row = rows[block_row_index]
 
         field_value_type = row.field_value_type
@@ -45,21 +47,32 @@ def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_inde
         elif field_value_type is None:
             pass
         else:
-            print(Fore.RED + 'Message: Convert row to node error' + Style.RESET_ALL)
+            alias_func_name = field_value_type
+            sub_inner_nodes: list[Node] = []
+            while True:
+                sub_block_row: Row = rows[block_row_index]
+                alias_func_arg_name = sub_block_row.field_value
+                alias_func_arg_value = sub_block_row.alias_func_arg_value
 
-            table = PrettyTable()
-            table.field_names = ["Sheet name", "row index", "id", "name", "type", "value"]
-            highlighted_field_value_type = Fore.RED + field_value_type + Style.RESET_ALL
-            table.add_row(
-                [sheet_name, row.original_index, row.link_id, row.field_name, highlighted_field_value_type,
-                 row.field_value])
-            error: list[str] = [
-                '\n\tDescription: Unknown "type"',
-                '\n' + str(table),
-                '\n'
-            ]
-            print("".join(error))
+                sub_inner_nodes.append(Node(alias_func_arg_name, alias_func_arg_value, None))
+
+                if _IsSubBlockEnded(block_row_index, end_block_row_index, rows):
+                    break
+                else:
+                    block_row_index += 1
+            func_node = Node(alias_func_name, None, sub_inner_nodes)
+            inner_nodes.append(Node(row.field_name, Configuration.ReferenceType.AliasFunc, [func_node]))
+        block_row_index += 1
     return Node(node_name, None, inner_nodes)
+
+
+def _IsSubBlockEnded(block_row_index: int, end_block_row_index: int, rows: list[Row]) -> bool:
+    if block_row_index == end_block_row_index:
+        return True
+
+    next_row = rows[block_row_index + 1]
+    is_sub_block_ended = next_row.field_name is not None or next_row.field_value_type is not None
+    return is_sub_block_ended
 
 
 def _IsValueField(field_value_type):
