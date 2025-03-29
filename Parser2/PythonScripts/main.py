@@ -6,8 +6,6 @@ from prettytable import PrettyTable
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
-from Configuration import FieldValueType
-from Json.BaseJsonItem import ObjectJsonItem, ValueFieldJsonItem
 from RowToJsonConverter import NodesLayerBuilder, Converter, AliasFuncNodesJoiner
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
@@ -83,7 +81,6 @@ def main(config_file_path: str):
         prepared_node = AliasFuncNodesJoiner.join(feature_name, node, alias_func_resolver, alias_func_stack)
         prepared_nodes_by_feature[feature_name] = prepared_node
 
-    # json_item = _GetTestJsonItem()
     print_features_benchmarks = PrettyTable()
     print_features_benchmarks.field_names = ["Feature name", "Json output path", "Duration (seconds)"]
     start_print_features_time = time.time()
@@ -102,39 +99,6 @@ def main(config_file_path: str):
 
     print("".join([str(benchmarks)]))
     print("\nDone!")
-
-
-def _GetTestJsonItem():
-    return ObjectJsonItem(None, False, [
-        # field values
-        ValueFieldJsonItem("$type", FieldValueType.String, "TypeXXX"),
-        ValueFieldJsonItem("field1", FieldValueType.Number, "12345"),
-        ValueFieldJsonItem("field2", FieldValueType.Bool, "true"),
-        ValueFieldJsonItem("field3", FieldValueType.Null, ""),
-        # object
-        ObjectJsonItem("field5", False, []),
-        ObjectJsonItem("field6", False, [
-            ValueFieldJsonItem("$type", FieldValueType.String, "TypeYYY")
-        ]),
-        # array
-        ObjectJsonItem("field7", True, []),
-        ObjectJsonItem("field8", True, [
-            ValueFieldJsonItem(None, FieldValueType.String, "TypeYYY")
-        ]),
-        ObjectJsonItem("field9", True, [
-            ObjectJsonItem(None, False, []),
-            ObjectJsonItem(None, False, [
-                ValueFieldJsonItem("$type", FieldValueType.String, "TypeYYY")
-            ]),
-        ]),
-        # dict
-        ObjectJsonItem("field10", False, [
-            ValueFieldJsonItem("$dict", FieldValueType.String, "TypeZZZ"),
-            ObjectJsonItem("Item1", False, []),
-            ObjectJsonItem("Item2", False, []),
-            ObjectJsonItem("Item3", False, []),
-        ]),
-    ])
 
 
 if __name__ == '__main__':
