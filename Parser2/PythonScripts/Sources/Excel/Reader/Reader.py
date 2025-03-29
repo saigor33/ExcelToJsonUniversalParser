@@ -11,8 +11,11 @@ def read(excel_file_path: str, parsing_config: Config.Parsing) -> dict[str, list
     rows_by_sheet_name = {}
 
     for sheet_name in parsing_config.ordered_by_level_sheet_names:
-        excel_sheet_data_frame = excel_file.parse(sheet_name, header=None, index_col=None)
-        rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
+        if sheet_name in excel_file.sheet_names:
+            excel_sheet_data_frame = excel_file.parse(sheet_name, header=None, index_col=None)
+            rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
+        else:
+            print(f"{Fore.RED}Error: sheet name '{sheet_name}' not found.{Style.RESET_ALL}")
 
     return rows_by_sheet_name
 
