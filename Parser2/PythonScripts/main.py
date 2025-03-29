@@ -2,7 +2,7 @@ import argparse
 import time
 import colorama
 import Json.Printer
-import NodesLoader
+import ParsingWrapper
 import Tests.Benchmark
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
@@ -21,20 +21,20 @@ def main(config_file_path: str):
     ref_nodes_joiner = RefNodesJoiner()
     json_printer = Json.Printer.Printer(config.padding_per_layer)
 
-    load_alias_func_nodes_result: NodesLoader.LoadResult = (
-        NodesLoader.load(ref_nodes_joiner, config.alias_funcs_parsing, config.excel_file_path))
+    load_alias_func_nodes_result: ParsingWrapper.LoadResult = (
+        ParsingWrapper.load(ref_nodes_joiner, config.alias_funcs_parsing, config.excel_file_path))
 
     alias_func_resolver = AliasFuncResolver(load_alias_func_nodes_result.nodes_by_feature_name)
 
-    load_feature_nodes_result: NodesLoader.LoadResult = \
-        NodesLoader.load(ref_nodes_joiner, config.parsing, config.excel_file_path)
+    load_feature_nodes_result: ParsingWrapper.LoadResult = \
+        ParsingWrapper.load(ref_nodes_joiner, config.parsing, config.excel_file_path)
 
-    resolve_alias_funcs_result: NodesLoader.ResolveAliasFuncsResult = \
-        NodesLoader.resolveAliasFuncs(alias_func_resolver, load_feature_nodes_result.nodes_by_feature_name)
+    resolve_alias_funcs_result: ParsingWrapper.ResolveAliasFuncsResult = \
+        ParsingWrapper.resolveAliasFuncs(alias_func_resolver, load_feature_nodes_result.nodes_by_feature_name)
     prepared_nodes_by_feature: dict[str, Node] = resolve_alias_funcs_result.nodes_by_feature
 
-    print_jsons_result: NodesLoader.PrintJsonsResult = \
-        NodesLoader.printJsons(config.parsing_features, json_printer, prepared_nodes_by_feature)
+    print_jsons_result: ParsingWrapper.PrintJsonsResult = \
+        ParsingWrapper.printJsons(config.parsing_features, json_printer, prepared_nodes_by_feature)
 
     total_parsing_duration = time.time() - start_parsing_time
 

@@ -1,12 +1,12 @@
 from prettytable import PrettyTable
 
-import NodesLoader
+import ParsingWrapper
 
 
 def printBenchmarks(
-        load_alias_func_nodes_result: NodesLoader.LoadResult,
-        load_feature_nodes_result: NodesLoader.LoadResult,
-        print_json_result: NodesLoader.PrintJsonsResult,
+        load_alias_func_nodes_result: ParsingWrapper.LoadResult,
+        load_feature_nodes_result: ParsingWrapper.LoadResult,
+        print_json_result: ParsingWrapper.PrintJsonsResult,
         total_parsing_duration
 ):
     print_features_benchmarks = _GeneratePrintFeaturesBenchmarks(print_json_result)
@@ -25,7 +25,7 @@ def printBenchmarks(
     print("".join([str(benchmarks)]))
 
 
-def _GeneratePrintFeaturesBenchmarks(print_json_result: NodesLoader.PrintJsonsResult) -> PrettyTable:
+def _GeneratePrintFeaturesBenchmarks(print_json_result: ParsingWrapper.PrintJsonsResult) -> PrettyTable:
     benchmarks = PrettyTable()
     benchmarks.field_names = ["Feature name", "Json output path", "Duration (seconds)"]
     for feature_name, print_result in print_json_result.print_result_by_feature_name.items():
