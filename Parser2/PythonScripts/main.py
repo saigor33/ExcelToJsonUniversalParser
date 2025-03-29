@@ -1,9 +1,6 @@
 import argparse
 import time
-
 import colorama
-from prettytable import PrettyTable
-
 import Json.Printer
 import NodesLoader
 import Tests.Benchmark
@@ -12,7 +9,6 @@ from RowToJsonConverter.Node import Node
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
 from Sources.Excel.Configuration.Config import Config
 from Sources.Excel.Configuration.ConfigLoader import ConfigLoader
-from Tests.Benchmark import printBenchmarks
 
 
 def main(config_file_path: str):
@@ -42,11 +38,12 @@ def main(config_file_path: str):
 
     total_parsing_duration = time.time() - start_parsing_time
 
-    Tests.Benchmark.printBenchmarks(
-        load_alias_func_nodes_result,
-        load_feature_nodes_result,
-        print_jsons_result,
-        total_parsing_duration)
+    if config.debug.need_print_benchmarks:
+        Tests.Benchmark.printBenchmarks(
+            load_alias_func_nodes_result,
+            load_feature_nodes_result,
+            print_jsons_result,
+            total_parsing_duration)
 
     print("\nDone!")
 

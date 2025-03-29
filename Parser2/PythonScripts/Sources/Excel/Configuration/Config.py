@@ -1,4 +1,8 @@
 class Config:
+    class Debug:
+        def __init__(self, need_print_benchmarks: bool):
+            self.need_print_benchmarks = need_print_benchmarks
+
     class Parsing:
         def __init__(self,
                      start_parsing_row_index: int,
@@ -24,10 +28,12 @@ class Config:
             self.output_directory = output_directory
             self.output_file_name = output_file_name
 
-    def __init__(self, excel_file_path: str, padding_per_layer: str, parsing: Parsing, alias_funcs_parsing: Parsing,
+    def __init__(self, excel_file_path: str, padding_per_layer: str, debug: Debug, parsing: Parsing,
+                 alias_funcs_parsing: Parsing,
                  parsing_features: dict[str, ParsingFeature]):
         self.excel_file_path = excel_file_path
         self.padding_per_layer = padding_per_layer
+        self.debug = debug
         self.parsing = parsing
         self.alias_funcs_parsing = alias_funcs_parsing
         self.parsing_features = parsing_features

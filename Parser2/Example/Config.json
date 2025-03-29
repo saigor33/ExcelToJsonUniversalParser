@@ -1,6 +1,10 @@
 {
 	"excelFilePath": "../Example/Doc.xlsx",
 	"paddingPerLayer": "    ",
+	"debug":
+	{
+		"needPrintBenchmarks": true
+	},
 	"parsingAliasFuncs":
 	{
 		"startParsingRowIndex": 3,

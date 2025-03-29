@@ -12,6 +12,7 @@ class ConfigLoader:
 
         excel_file_path: str = config_json['excelFilePath']
         padding_per_layer: str = config_json['paddingPerLayer']
+        debug_config: Config.Debug = self.__LoadDebugConfig(config_json['debug'])
 
         parsing_excel_part_json = config_json['parsingExcel']
         parsing_excel_config: Config.Parsing = self.__LoadParsingExcelConfig(parsing_excel_part_json)
@@ -21,7 +22,8 @@ class ConfigLoader:
 
         parsing_feature_configs: dict[str, Config.ParsingFeature] = self.__LoadParsingFeatureConfigs(config_json)
 
-        return Config(excel_file_path, padding_per_layer, parsing_excel_config, parsing_alias_funcs_config,
+        return Config(excel_file_path, padding_per_layer, debug_config, parsing_excel_config,
+                      parsing_alias_funcs_config,
                       parsing_feature_configs)
 
     def __LoadJson(self):
@@ -31,6 +33,11 @@ class ConfigLoader:
         json_file.close()
 
         return config_json
+
+    @staticmethod
+    def __LoadDebugConfig(config_json) -> Config.Debug:
+        need_print_benchmarks = bool(config_json["needPrintBenchmarks"])
+        return Config.Debug(need_print_benchmarks)
 
     @staticmethod
     def __LoadParsingFeatureConfigs(config_json) -> dict[str, Config.ParsingFeature]:
