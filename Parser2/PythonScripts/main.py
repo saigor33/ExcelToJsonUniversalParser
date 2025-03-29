@@ -30,7 +30,7 @@ def main(config_file_path: str):
         NodesLoader.load(ref_nodes_joiner, config.parsing, config.excel_file_path)
 
     resolve_alias_funcs_result: NodesLoader.ResolveAliasFuncsResult = \
-        NodesLoader.ResolveAliasFuncs(alias_func_resolver, load_feature_nodes_result.nodes_by_feature_name)
+        NodesLoader.resolveAliasFuncs(alias_func_resolver, load_feature_nodes_result.nodes_by_feature_name)
     prepared_nodes_by_feature: dict[str, Node] = resolve_alias_funcs_result.nodes_by_feature
 
     print_jsons_result: NodesLoader.PrintJsonsResult = \

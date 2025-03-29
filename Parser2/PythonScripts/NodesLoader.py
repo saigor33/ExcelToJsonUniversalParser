@@ -1,9 +1,4 @@
-import argparse
 import time
-
-import colorama
-from prettytable import PrettyTable
-
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
@@ -14,7 +9,6 @@ from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
 from Sources.Excel.Configuration.Config import Config
-from Sources.Excel.Configuration.ConfigLoader import ConfigLoader
 from Sources.Excel.Reader.Row import Row
 
 
@@ -66,11 +60,11 @@ class PrintJsonsResult:
 
 
 def load(ref_nodes_joiner: RefNodesJoiner, parsing_config: Config.Parsing, excel_file_path: str) -> LoadResult:
-    read_rows_result: ReadRowsResult = ReadExcelRows(excel_file_path, parsing_config)
-    convert_rows_to_nodes_result: ConvertRowsToNodesResult = _ConvertRowsToNodes(read_rows_result.rows_by_sheet_name)
+    read_rows_result: ReadRowsResult = readExcelRows(excel_file_path, parsing_config)
+    convert_rows_to_nodes_result: ConvertRowsToNodesResult = convertRowsToNodes(read_rows_result.rows_by_sheet_name)
     nodes_layer: NodesLayer = NodesLayerBuilder.build(parsing_config.ordered_by_level_sheet_names,
                                                       convert_rows_to_nodes_result.nodes_by_sheet_name)
-    joined_ref_nodes_result: JoinRefNodesResult = _JoinRefNodes(nodes_layer, ref_nodes_joiner)
+    joined_ref_nodes_result: JoinRefNodesResult = joinRefNodes(nodes_layer, ref_nodes_joiner)
 
     return LoadResult(
         joined_ref_nodes_result.nodes_by_feature_name,
@@ -80,7 +74,7 @@ def load(ref_nodes_joiner: RefNodesJoiner, parsing_config: Config.Parsing, excel
     )
 
 
-def ResolveAliasFuncs(
+def resolveAliasFuncs(
         alias_func_resolver: AliasFuncResolver,
         nodes_by_feature_name: dict[str, Node]
 ) -> ResolveAliasFuncsResult:
@@ -96,7 +90,7 @@ def ResolveAliasFuncs(
     return ResolveAliasFuncsResult(prepared_nodes_by_feature, duration)
 
 
-def ReadExcelRows(excel_file_path, parsing_config) -> ReadRowsResult:
+def readExcelRows(excel_file_path, parsing_config) -> ReadRowsResult:
     start_time = time.time()
 
     rows_by_sheet_name: dict[str, list[Row]] = ExcelReader.read(excel_file_path, parsing_config)
@@ -105,7 +99,7 @@ def ReadExcelRows(excel_file_path, parsing_config) -> ReadRowsResult:
     return ReadRowsResult(rows_by_sheet_name, duration)
 
 
-def _JoinRefNodes(nodes_layer: NodesLayer, ref_nodes_joiner: RefNodesJoiner) -> JoinRefNodesResult:
+def joinRefNodes(nodes_layer: NodesLayer, ref_nodes_joiner: RefNodesJoiner) -> JoinRefNodesResult:
     start_time = time.time()
 
     joined_nodes_by_feature_name: dict[str, Node] = {}
@@ -117,7 +111,7 @@ def _JoinRefNodes(nodes_layer: NodesLayer, ref_nodes_joiner: RefNodesJoiner) -> 
     return JoinRefNodesResult(joined_nodes_by_feature_name, duration)
 
 
-def _ConvertRowsToNodes(rows_by_sheet_name: dict[str, list[Row]]) -> ConvertRowsToNodesResult:
+def convertRowsToNodes(rows_by_sheet_name: dict[str, list[Row]]) -> ConvertRowsToNodesResult:
     start_time = time.time()
 
     nodes_by_sheet_name: dict[str, list[Node]] = {}
