@@ -7,8 +7,10 @@ import Tests.Benchmark
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
-from Sources.Excel.Configuration.Config import Config
-from Sources.Excel.Configuration.ConfigLoader import ConfigLoader
+from Sources import SourceWrapperAbstractFactory
+from Sources.BaseSourceWrapper import BaseSourceWrapper
+from Sources.Configuration.Configs.Config import Config
+from Sources.Configuration.ConfigLoader import ConfigLoader
 
 
 def main(config_file_path: str):
@@ -18,16 +20,18 @@ def main(config_file_path: str):
 
     config: Config = ConfigLoader(config_file_path).Load()
 
+    source_wrapper: BaseSourceWrapper = SourceWrapperAbstractFactory.create(config)
+
     ref_nodes_joiner = RefNodesJoiner()
     json_printer = Json.Printer.Printer(config.padding_per_layer)
 
-    load_alias_func_nodes_result: ParsingWrapper.LoadResult = (
-        ParsingWrapper.load(ref_nodes_joiner, config.alias_funcs_parsing, config.excel_file_path))
+    load_alias_func_nodes_result: ParsingWrapper.LoadResult = \
+        ParsingWrapper.load(ref_nodes_joiner, source_wrapper, source_wrapper.getAliasFuncsParsingConfig())
 
     alias_func_resolver = AliasFuncResolver(load_alias_func_nodes_result.nodes_by_feature_name)
 
     load_feature_nodes_result: ParsingWrapper.LoadResult = \
-        ParsingWrapper.load(ref_nodes_joiner, config.parsing, config.excel_file_path)
+        ParsingWrapper.load(ref_nodes_joiner, source_wrapper, source_wrapper.getFeaturesParsingConfig())
 
     resolve_alias_funcs_result: ParsingWrapper.ResolveAliasFuncsResult = \
         ParsingWrapper.resolveAliasFuncs(alias_func_resolver, load_feature_nodes_result.nodes_by_feature_name)

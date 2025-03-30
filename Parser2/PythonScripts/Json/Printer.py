@@ -5,7 +5,7 @@ import time
 from Configuration import FieldValueType
 from Json.BaseJsonItem import ObjectJsonItem, BaseJsonItem, ValueFieldJsonItem
 from Json.LayerDelimiterPreset import LayerDelimiterPreset
-from Sources.Excel.Configuration.Config import Config
+from Sources.Configuration.Configs.ParsingFeatureConfig import ParsingFeatureConfig
 
 
 class Result:
@@ -20,7 +20,7 @@ class Printer:
 
     def print(
             self,
-            parsing_feature_config: Config.ParsingFeature,
+            parsing_feature_config: ParsingFeatureConfig,
             json_item: BaseJsonItem,
     ) -> Result:
         start_print_time = time.time()

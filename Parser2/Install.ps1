@@ -73,6 +73,16 @@ pip install colorama==0.4.6
 Write-Host "Python module `"colorama`" installed" -foreground green -nonewline
 echo `n
 
+Write-Host "Step 9: Install python module `"google-api-python-client`" v. 2.166.0"
+pip install google-api-python-client==2.166.0
+Write-Host "Python module `" google-api-python-client`" installed" -foreground green -nonewline
+echo `n
+
+Write-Host "Step 9: Install python module `"google-auth-oauthlib`" v. 1.2.1"
+pip install google-auth-oauthlib==1.2.1
+Write-Host "Python module `"google-auth-oauthlib`" installed" -foreground green -nonewline
+echo `n
+
 # Test install
 pyenv version
 

@@ -2,17 +2,17 @@ import pandas
 from typing import Optional
 from colorama import Fore, Style
 from prettytable import PrettyTable
-from Sources.Excel.Configuration.Config import Config
-from Sources.Excel.Reader.Row import Row
+from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
+from Sources.Row import Row
 
 
-def read(excel_file_path: str, parsing_config: Config.Parsing) -> dict[str, list[Row]]:
+def read(excel_file_path: str, parsing_config: ParsingConfig) -> dict[str, list[Row]]:
     excel_file = pandas.ExcelFile(excel_file_path)
     rows_by_sheet_name = {}
 
     for sheet_name in parsing_config.ordered_by_level_sheet_names:
         if sheet_name in excel_file.sheet_names:
-            excel_sheet_data_frame = excel_file.parse(sheet_name, header=None, index_col=None)
+            excel_sheet_data_frame = excel_file.parse(sheet_name, index_col=None)
             rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
         else:
             print(f"{Fore.RED}Error: sheet name '{sheet_name}' not found.{Style.RESET_ALL}")
@@ -20,7 +20,7 @@ def read(excel_file_path: str, parsing_config: Config.Parsing) -> dict[str, list
     return rows_by_sheet_name
 
 
-def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing_config: Config.Parsing) -> list[Row]:
+def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing_config: ParsingConfig) -> list[Row]:
     result = []
 
     index: int
@@ -28,12 +28,12 @@ def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing
         if index < parsing_config.start_parsing_row_index:
             continue
 
-        if not _NeedIgnoreRow(sheet_name, index, excel_row, parsing_config.ignore_column_index):
-            link_id = _ReadCellValue(excel_row, parsing_config.link_id_column_index)
-            field_name = _ReadCellValue(excel_row, parsing_config.field_name_column_index)
-            field_value_type = _ReadCellValue(excel_row, parsing_config.field_value_type_column_index)
-            field_value = _ReadCellValue(excel_row, parsing_config.field_value_column_index)
-            alias_func_arg_value = _ReadCellValue(excel_row, parsing_config.alias_func_arg_value_column_index)
+        if not _NeedIgnoreRow(sheet_name, index, excel_row, parsing_config.ignore_column_name):
+            link_id = _ReadCellValue(excel_row, parsing_config.link_id_column_name)
+            field_name = _ReadCellValue(excel_row, parsing_config.field_name_column_name)
+            field_value_type = _ReadCellValue(excel_row, parsing_config.field_value_type_column_name)
+            field_value = _ReadCellValue(excel_row, parsing_config.field_value_column_name)
+            alias_func_arg_value = _ReadCellValue(excel_row, parsing_config.alias_func_arg_value_column_name)
 
             is_empty_row = (
                     link_id is None
@@ -48,19 +48,19 @@ def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing
     return result
 
 
-def _NeedIgnoreRow(sheet_name: str, row_index: int, excel_row, ignore_column_index: int):
-    ignore_value = _ReadCellValue(excel_row, ignore_column_index)
+def _NeedIgnoreRow(sheet_name: str, row_index: int, excel_row, ignore_column_name: str):
+    ignore_value = _ReadCellValue(excel_row, ignore_column_name)
 
     if ignore_value is None:
         return False
 
     ignore_value = str(ignore_value).lower()
-    if ignore_value == 'true' or ignore_value == '1':
+    if ignore_value == 'true' or ignore_value == '1' or ignore_value == '1.0':
         return True
-    if ignore_value == 'false' or ignore_value == '0':
+    if ignore_value == 'false' or ignore_value == '0' or ignore_value == '0.0':
         return False
 
-    print(f"{Fore.YELLOW}Warning:  ignore type should be bool.{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}Warning: ignore type should be bool.{Style.RESET_ALL}")
 
     table = PrettyTable()
     table.field_names = ["Sheet name", "Row index", "ignore", ]
@@ -71,11 +71,11 @@ def _NeedIgnoreRow(sheet_name: str, row_index: int, excel_row, ignore_column_ind
     return False
 
 
-def _ReadCellValue(excel_row, column_index: int) -> Optional[str]:
-    if column_index not in excel_row.index:
+def _ReadCellValue(excel_row, column_name: str) -> Optional[str]:
+    if column_name not in excel_row:
         return None
 
-    cell = excel_row.iloc[column_index]
+    cell = excel_row.at[column_name]
     return str(cell).strip() if not _IsEmptyCell(cell) else None
 
 

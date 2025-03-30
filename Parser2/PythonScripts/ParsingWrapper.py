@@ -2,14 +2,16 @@ import time
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
-import Sources.Excel.Reader.Reader as ExcelReader
+import Sources.Excel.Reader as ExcelReader
 from RowToJsonConverter import NodesLayerBuilder, Converter, AliasFuncNodesJoiner
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
-from Sources.Excel.Configuration.Config import Config
-from Sources.Excel.Reader.Row import Row
+from Sources.BaseSourceWrapper import BaseSourceWrapper
+from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
+from Sources.Configuration.Configs.ParsingFeatureConfig import ParsingFeatureConfig
+from Sources.Row import Row
 
 
 class LoadResult:
@@ -59,8 +61,9 @@ class PrintJsonsResult:
         self.duration = total_duration
 
 
-def load(ref_nodes_joiner: RefNodesJoiner, parsing_config: Config.Parsing, excel_file_path: str) -> LoadResult:
-    read_rows_result: ReadRowsResult = readExcelRows(excel_file_path, parsing_config)
+def load(ref_nodes_joiner: RefNodesJoiner, source_wrapper: BaseSourceWrapper,
+         parsing_config: ParsingConfig) -> LoadResult:
+    read_rows_result: ReadRowsResult = readExcelRows(source_wrapper, parsing_config)
     convert_rows_to_nodes_result: ConvertRowsToNodesResult = convertRowsToNodes(read_rows_result.rows_by_sheet_name)
     nodes_layer: NodesLayer = NodesLayerBuilder.build(parsing_config.ordered_by_level_sheet_names,
                                                       convert_rows_to_nodes_result.nodes_by_sheet_name)
@@ -90,10 +93,10 @@ def resolveAliasFuncs(
     return ResolveAliasFuncsResult(prepared_nodes_by_feature, duration)
 
 
-def readExcelRows(excel_file_path, parsing_config) -> ReadRowsResult:
+def readExcelRows(source_wrapper: BaseSourceWrapper, parsing_config) -> ReadRowsResult:
     start_time = time.time()
 
-    rows_by_sheet_name: dict[str, list[Row]] = ExcelReader.read(excel_file_path, parsing_config)
+    rows_by_sheet_name: dict[str, list[Row]] = source_wrapper.read(parsing_config)
 
     duration: float = time.time() - start_time
     return ReadRowsResult(rows_by_sheet_name, duration)
@@ -122,12 +125,13 @@ def convertRowsToNodes(rows_by_sheet_name: dict[str, list[Row]]) -> ConvertRowsT
     return ConvertRowsToNodesResult(nodes_by_sheet_name, duration)
 
 
-def printJsons(parsing_feature_by_feature_name: dict[str, Config.ParsingFeature], json_printer: Json.Printer.Printer,
+def printJsons(parsing_feature_by_feature_name: dict[str, ParsingFeatureConfig], json_printer: Json.Printer.Printer,
                nodes_by_feature: dict[str, Node]) -> PrintJsonsResult:
     start_time = time.time()
 
     duration_by_feature_name: dict[str, Json.Printer.Result] = {}
     for feature_name, parsing_feature in parsing_feature_by_feature_name.items():
+        # check exists feature_name in nodes_by_feature
         json_item = NodesToJsonItemConverter.Converter.convert(nodes_by_feature[feature_name])
         print_result: Json.Printer = json_printer.print(parsing_feature, json_item)
         duration_by_feature_name[feature_name] = print_result
