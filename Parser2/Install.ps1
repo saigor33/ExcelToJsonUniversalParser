@@ -1,3 +1,15 @@
+Function InstallPythonModule {
+	param (
+        [string]$moduleName,
+        [string]$moduleVersions
+    )
+   
+	Write-Host "Step 7: Install python module `"$moduleName`" v.$moduleVersions"
+	pip install $moduleName==$moduleVersions
+	Write-Host "Python module `"$moduleName`" installed" -foreground green -nonewline
+	echo `n
+}
+
 $ErrorActionPreference = "Inquire"
 $installationSubScriptsPath = "./InstallationSubScripts/"
 
@@ -44,44 +56,14 @@ python $installPipFilePath
 Write-Host "Pip installed!" -foreground green -nonewline
 echo `n
 
-# Install numpy
-Write-Host "Step 7: Install python module `"numpy`" v.1.20.3"
-pip install numpy==1.20.3
-Write-Host "Python module `"numpy`" installed" -foreground green -nonewline
-
-# Setup pandas
-Write-Host "Step 8: Install python module `"pandas`" v.1.5.2"
-pip install pandas==1.5.2
-Write-Host "Python module `"pandas`" installed" -foreground green -nonewline
-echo `n
-
-# Setup openpyxl
-Write-Host "Step 9: Install python module `"openpyxl`" v.3.1.3"
-pip install openpyxl==3.1.3
-Write-Host "Python module `"openpyxl`" installed" -foreground green -nonewline
-echo `n
-
-# Setup PrettyTable
-Write-Host "Step 9: Install python module `"PrettyTable`" v.3.15.1"
-pip install prettytable==3.15.1
-Write-Host "Python module `"PrettyTable`" installed" -foreground green -nonewline
-echo `n
-
-# Setup PrettyTable
-Write-Host "Step 9: Install python module `"colorama`" v.0.4.6"
-pip install colorama==0.4.6
-Write-Host "Python module `"colorama`" installed" -foreground green -nonewline
-echo `n
-
-Write-Host "Step 9: Install python module `"google-api-python-client`" v. 2.166.0"
-pip install google-api-python-client==2.166.0
-Write-Host "Python module `" google-api-python-client`" installed" -foreground green -nonewline
-echo `n
-
-Write-Host "Step 9: Install python module `"google-auth-oauthlib`" v. 1.2.1"
-pip install google-auth-oauthlib==1.2.1
-Write-Host "Python module `"google-auth-oauthlib`" installed" -foreground green -nonewline
-echo `n
+InstallPythonModule -moduleName "numpy" -moduleVersions "1.20.3"
+InstallPythonModule -moduleName "pandas" -moduleVersions "1.5.2"
+InstallPythonModule -moduleName "openpyxl" -moduleVersions "3.1.3"
+InstallPythonModule -moduleName "prettytable" -moduleVersions "3.15.1"
+InstallPythonModule -moduleName "colorama" -moduleVersions "0.4.6"
+InstallPythonModule -moduleName "oauth2client" -moduleVersions "4.1.3"
+InstallPythonModule -moduleName "google-api-python-client" -moduleVersions "2.166.0"
+InstallPythonModule -moduleName "google-auth-oauthlib" -moduleVersions "1.2.1"
 
 # Test install
 pyenv version
