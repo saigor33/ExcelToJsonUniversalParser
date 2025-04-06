@@ -1,10 +1,17 @@
 import os
 import sys
+import time
 
 from Configuration import FieldValueType
 from Json.BaseJsonItem import ObjectJsonItem, BaseJsonItem, ValueFieldJsonItem
 from Json.LayerDelimiterPreset import LayerDelimiterPreset
-from Sources.Excel.Configuration.Config import Config
+from Sources.Configuration.Configs.ParsingFeatureConfig import ParsingFeatureConfig
+
+
+class Result:
+    def __init__(self, output_file_path: str, duration: float):
+        self.output_file_path = output_file_path
+        self.duration = duration
 
 
 class Printer:
@@ -13,10 +20,11 @@ class Printer:
 
     def print(
             self,
-            feature_name: str,
-            parsing_feature_config: Config.ParsingFeature,
+            parsing_feature_config: ParsingFeatureConfig,
             json_item: BaseJsonItem,
-    ):
+    ) -> Result:
+        start_print_time = time.time()
+
         if not os.path.exists(parsing_feature_config.output_directory):
             os.makedirs(parsing_feature_config.output_directory)
 
@@ -26,19 +34,13 @@ class Printer:
         output_file = open(output_file_path, 'w')
         sys.stdout = output_file
 
-        # json_item = self.__json_three_converter.build(sheet_value_reader, feature_name, parsed_data_items)
-        # self.__json_items_printer.print(json_item)
         self._PrintInternal(json_item, 0, False)
 
         sys.stdout = orig_stdout
         output_file.close()
 
-        print(''.join(
-            [
-                "ParsingFeatureFinished:\n",
-                "\tFeatureName: ", feature_name, ",\n",
-                "\tJsonPath: ", output_file_path
-            ]))
+        total_print_time_duration = time.time() - start_print_time
+        return Result(output_file_path, total_print_time_duration)
 
     def _PrintInternal(self, json_item: BaseJsonItem, layer_index: int, need_comma: bool):
         json_item_type = type(json_item)

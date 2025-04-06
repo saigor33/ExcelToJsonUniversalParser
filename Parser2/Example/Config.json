@@ -1,20 +1,80 @@
 {
-	"excelFilePath": "../Example/Doc.xlsx",
 	"paddingPerLayer": "    ",
-	"parsingExcel": 
+	"debug":
 	{
-		"startParsingRowIndex": 3,
-		"ignoreColumnIndex": 1,
-		"linkIdColumnIndex": 2,
-		"fieldNameColumnIndex":3,
-		"fieldValueTypeColumnIndex":4,
-		"fieldValueColumnIndex":5,
-		"orderedByLevelSheetNames":
-		[
-			"Lvl0",
-			"Lvl1",
-			"Lvl2"
-		]
+		"needPrintBenchmarks": true
+	},
+	"selectedSourceType":"GoogleSheets",
+	"excelSource":
+	{
+		"excelFilePath": "../Example/Doc.xlsx",
+		"aliasFuncsParsing":
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "ignore",
+			"linkIdColumnName": "funcId",
+			"fieldNameColumnName":"name",
+			"fieldValueTypeColumnName":"type",
+			"fieldValueColumnName":"value",
+			"aliasFuncArgValueColumnName": "aliasFuncArg",
+			"orderedByLevelSheetNames":
+			[
+				"AliasFuncsLvl0",
+				"AliasFuncsLvl1"
+			]
+		},
+		"featuresParsing": 
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "ignore",
+			"linkIdColumnName": "id",
+			"fieldNameColumnName":"name",
+			"fieldValueTypeColumnName":"type",
+			"fieldValueColumnName":"value",
+			"aliasFuncArgValueColumnName": "aliasFuncArg",
+			"orderedByLevelSheetNames":
+			[
+				"Lvl0",
+				"Lvl1",
+				"Lvl2"
+			]
+		}
+	},
+	"googleSheetsSource":
+	{
+		"credentialsFilePath": "../Example/credentials.json",
+		"spreadsheetId": "1lzM-Hp5n5avQ8c-2qiTImIC487HOzAWSRQYNAmUs3TM",
+		"aliasFuncsParsing":
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "B",
+			"linkIdColumnName": "C",
+			"fieldNameColumnName":"D",
+			"fieldValueTypeColumnName":"E",
+			"fieldValueColumnName":"F",
+			"aliasFuncArgValueColumnName": "G",
+			"orderedByLevelSheetNames":
+			[
+				"AliasFuncsLvl0",
+				"AliasFuncsLvl1"
+			]
+		},
+		"featuresParsing": 
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "B",
+			"linkIdColumnName": "C",
+			"fieldNameColumnName":"D",
+			"fieldValueTypeColumnName":"E",
+			"fieldValueColumnName":"F",
+			"aliasFuncArgValueColumnName": "G",
+			"orderedByLevelSheetNames":
+			[
+				"Lvl0",
+				"Lvl1",
+				"Lvl2"
+			]
+		}
 	},
 	"parsingFeatures":
 	[
