@@ -2,8 +2,7 @@ from typing import Optional
 
 import googleapiclient
 import googleapiclient.discovery
-import httplib2
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
 from Sources.GoogleSheet.RangeConfig import RangeConfig
 
 
@@ -12,14 +11,12 @@ def load(
         spreadsheet_id: str,
         range_configs: list[RangeConfig]
 ) -> dict[str, list[str]]:
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(
-        credentials_file_name,
-        [
-            'https://www.googleapis.com/auth/spreadsheets'
-        ]
-    )
-    http_auth = credentials.authorize(httplib2.Http())
-    sheets_service = googleapiclient.discovery.build(serviceName='sheets', version='v4', http=http_auth)
+    scopes = [
+        'https://www.googleapis.com/auth/spreadsheets'
+    ]
+
+    credentials = service_account.Credentials.from_service_account_file(credentials_file_name, scopes=scopes)
+    sheets_service = googleapiclient.discovery.build(serviceName='sheets', version='v4', credentials=credentials)
 
     # todo: validate permission on GoogleSheets Api
     # todo: validate permission Google Sheets file

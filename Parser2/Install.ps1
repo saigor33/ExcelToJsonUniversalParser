@@ -61,9 +61,7 @@ InstallPythonModule -moduleName "pandas" -moduleVersions "1.5.2"
 InstallPythonModule -moduleName "openpyxl" -moduleVersions "3.1.3"
 InstallPythonModule -moduleName "prettytable" -moduleVersions "3.15.1"
 InstallPythonModule -moduleName "colorama" -moduleVersions "0.4.6"
-InstallPythonModule -moduleName "oauth2client" -moduleVersions "4.1.3"
 InstallPythonModule -moduleName "google-api-python-client" -moduleVersions "2.166.0"
-InstallPythonModule -moduleName "google-auth-oauthlib" -moduleVersions "1.2.1"
 
 # Test install
 pyenv version
