@@ -2,6 +2,7 @@ from typing import Optional
 from colorama import Fore, Style
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
+from Tests import LogFormatter
 
 
 def build(ordered_by_level_sheet_names: list[str], nodes_by_sheet_name: dict[str, list[Node]]) -> NodesLayer:
@@ -10,6 +11,6 @@ def build(ordered_by_level_sheet_names: list[str], nodes_by_sheet_name: dict[str
         if sheet_name in nodes_by_sheet_name:
             result = NodesLayer(sheet_name, nodes_by_sheet_name[sheet_name], result)
         else:
-            print(f"{Fore.RED}Error: sheet name '{sheet_name}' not found.{Style.RESET_ALL}")
+            print(LogFormatter.formatErrorColor(f"Error: sheet name '{sheet_name}' not found."))
 
     return result

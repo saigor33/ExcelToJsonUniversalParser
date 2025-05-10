@@ -4,6 +4,7 @@ from colorama import Fore, Style
 from prettytable import PrettyTable
 from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
 from Sources.Row import Row
+from Tests import LogFormatter
 
 
 def read(excel_file_path: str, parsing_config: ParsingConfig) -> dict[str, list[Row]]:
@@ -15,7 +16,7 @@ def read(excel_file_path: str, parsing_config: ParsingConfig) -> dict[str, list[
             excel_sheet_data_frame = excel_file.parse(sheet_name, index_col=None)
             rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
         else:
-            print(f"{Fore.RED}Error: sheet name '{sheet_name}' not found.{Style.RESET_ALL}")
+            print(LogFormatter.formatErrorColor(f"Error: sheet name '{sheet_name}' not found."))
 
     return rows_by_sheet_name
 

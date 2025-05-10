@@ -4,6 +4,7 @@ from prettytable import PrettyTable
 import Configuration.ReferenceType
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
+from Tests import LogFormatter
 
 
 class RefNodesJoiner:
@@ -53,7 +54,7 @@ class RefNodesJoiner:
                                                                                 nodes_layer.next_nodes_layer)
                     return next_layer_node.inner_nodes
 
-        print(Fore.RED + 'Error: Missing ref value' + Style.RESET_ALL)
+        print(LogFormatter.formatErrorColor('Error: Missing ref value'))
 
         table = PrettyTable()
         table.field_names = ['Search sheet name', 'id']
@@ -62,12 +63,12 @@ class RefNodesJoiner:
         missing_id: str
         if nodes_layer is None:
             description = 'Sheet names ended'
-            sheet_name = Fore.RED + '<Sheet names ended>' + Style.RESET_ALL
+            sheet_name = LogFormatter.formatErrorColor('<Sheet names ended>')
             missing_id = ref_node_field_name
         else:
             description = 'Unknown "id"'
             sheet_name = nodes_layer.sheet_name
-            missing_id = Fore.RED + ref_node_field_name + Style.RESET_ALL
+            missing_id = LogFormatter.formatErrorColor(ref_node_field_name)
 
         table.add_row([sheet_name, missing_id])
         error: list[str] = [
