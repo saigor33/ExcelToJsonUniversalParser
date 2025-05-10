@@ -1,5 +1,4 @@
 from typing import Optional
-from colorama import Fore, Style
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.NodesLayer import NodesLayer
 from Tests import LogFormatter

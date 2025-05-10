@@ -1,4 +1,3 @@
-from colorama import Fore, Style
 from prettytable import PrettyTable
 
 import Configuration.ReferenceType

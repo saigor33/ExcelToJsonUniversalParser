@@ -1,11 +1,11 @@
 from typing import Optional
 
-from colorama import Fore, Style
 from prettytable import PrettyTable
 
 from Sources import Row
 from Sources.GoogleSheet import DataLoader
 from Sources.GoogleSheet.RangeConfig import RangeConfig
+from Tests import LogFormatter
 
 
 class SheetConfig:
@@ -148,11 +148,11 @@ def _NeedIgnoreRow(sheet_name: str, ignore_rows_range: list[str], row_index: int
     if ignore_value == 'false' or ignore_value == '0' or ignore_value == '0.0':
         return False
 
-    print(f"{Fore.YELLOW}Warning: ignore type should be bool.{Style.RESET_ALL}")
+    print(LogFormatter.formatWarningColor('Warning: ignore type should be bool.'))
 
     table = PrettyTable()
     table.field_names = ["Sheet name", "Row index", "ignore", ]
-    highlighted_ignore_value = "".join([Fore.YELLOW, ignore_value, Style.RESET_ALL])
+    highlighted_ignore_value = LogFormatter.formatWarningColor(ignore_value)
     table.add_row([sheet_name, row_index, highlighted_ignore_value])
 
     print(f"{str(table)}\n")
