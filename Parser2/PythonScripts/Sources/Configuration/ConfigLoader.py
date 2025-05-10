@@ -36,16 +36,16 @@ class ConfigLoader:
 
     def __LoadExcelSourceConfig(self, config_json) -> ExcelSourceConfig:
         excel_file_path: str = config_json['excelFilePath']
-        features_parsing_config: ParsingConfig = self.__LoadParsingExcelConfig(config_json['featuresParsing'])
-        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingExcelConfig(config_json['aliasFuncsParsing'])
+        features_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['featuresParsing'])
+        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['aliasFuncsParsing'])
 
         return ExcelSourceConfig(excel_file_path, features_parsing_config, alias_funcs_parsing_config)
 
     def __LoadGoogleSheetsSourceConfig(self, config_json) -> GoogleSheetsSourceConfig:
         credentials_file_path: str = config_json['credentialsFilePath']
         spreadsheet_id: str = config_json['spreadsheetId']
-        features_parsing_config: ParsingConfig = self.__LoadParsingExcelConfig(config_json['featuresParsing'])
-        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingExcelConfig(config_json['aliasFuncsParsing'])
+        features_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['featuresParsing'])
+        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['aliasFuncsParsing'])
 
         return GoogleSheetsSourceConfig(credentials_file_path, spreadsheet_id, features_parsing_config,
                                         alias_funcs_parsing_config)
@@ -81,7 +81,7 @@ class ConfigLoader:
         return result
 
     @staticmethod
-    def __LoadParsingExcelConfig(config_json) -> ParsingConfig:
+    def __LoadParsingConfig(config_json) -> ParsingConfig:
         start_parsing_row_index = int(config_json['startParsingRowIndex'])
         ignore_column_name = str(config_json['ignoreColumnName'])
         link_id_column_name = str(config_json['linkIdColumnName'])

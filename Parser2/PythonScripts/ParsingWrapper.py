@@ -2,7 +2,6 @@ import time
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
-import Sources.Excel.Reader as ExcelReader
 from RowToJsonConverter import NodesLayerBuilder, Converter, AliasFuncNodesJoiner
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
@@ -63,7 +62,7 @@ class PrintJsonsResult:
 
 def load(ref_nodes_joiner: RefNodesJoiner, source_wrapper: BaseSourceWrapper,
          parsing_config: ParsingConfig) -> LoadResult:
-    read_rows_result: ReadRowsResult = readExcelRows(source_wrapper, parsing_config)
+    read_rows_result: ReadRowsResult = readRows(source_wrapper, parsing_config)
     convert_rows_to_nodes_result: ConvertRowsToNodesResult = convertRowsToNodes(read_rows_result.rows_by_sheet_name)
     nodes_layer: NodesLayer = NodesLayerBuilder.build(parsing_config.ordered_by_level_sheet_names,
                                                       convert_rows_to_nodes_result.nodes_by_sheet_name)
@@ -93,7 +92,7 @@ def resolveAliasFuncs(
     return ResolveAliasFuncsResult(prepared_nodes_by_feature, duration)
 
 
-def readExcelRows(source_wrapper: BaseSourceWrapper, parsing_config) -> ReadRowsResult:
+def readRows(source_wrapper: BaseSourceWrapper, parsing_config) -> ReadRowsResult:
     start_time = time.time()
 
     rows_by_sheet_name: dict[str, list[Row]] = source_wrapper.read(parsing_config)
