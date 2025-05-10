@@ -1,4 +1,5 @@
 import argparse
+import sys
 import time
 import colorama
 import Json.Printer
@@ -11,6 +12,7 @@ from Sources import SourceWrapperAbstractFactory
 from Sources.BaseSourceWrapper import BaseSourceWrapper
 from Sources.Configuration.Configs.Config import Config
 from Sources.Configuration.ConfigLoader import ConfigLoader
+from Tests import ExceptionsHandler
 
 
 def main(config_file_path: str):
@@ -58,6 +60,15 @@ if __name__ == '__main__':
                         required=True,
                         type=str,
                         help='Path to config.json')
+    parser.add_argument('--print_stacktrace',
+                        required=True,
+                        type=str,
+                        help='Activate print exceptions stacktrace')
     args = parser.parse_args()
 
-    main(args.config_path)
+    try:
+        main(args.config_path)
+    except Exception as exception:
+        need_print_stacktrace = True if str.lower(args.print_stacktrace) == 'true' else False
+        ExceptionsHandler.handle(exception, need_print_stacktrace)
+        sys.exit(1)

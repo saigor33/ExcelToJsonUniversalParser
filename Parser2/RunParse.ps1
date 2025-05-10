@@ -6,7 +6,7 @@ Write-Host "config_file_path=" $json_config_file_path
 echo `n
 
 cd .\PythonScripts
-python .\main.py --config_path $json_config_file_path
+python .\main.py --config_path $json_config_file_path --print_stacktrace false
 
 cd ..
 
