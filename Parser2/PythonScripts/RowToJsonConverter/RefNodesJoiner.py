@@ -71,9 +71,9 @@ class RefNodesJoiner:
 
         table.add_row([sheet_name, missing_id])
         error: list[str] = [
-            '\n\tDescription: ' + description,
-            '\n' + str(table),
-            '\n'
+            f'\n\tDescription: {description}',
+            f'\n{str(table)}',
+            f'\n'
         ]
         print("".join(error))
         return []

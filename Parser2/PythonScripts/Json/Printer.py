@@ -28,7 +28,7 @@ class Printer:
         if not os.path.exists(parsing_feature_config.output_directory):
             os.makedirs(parsing_feature_config.output_directory)
 
-        output_file_path = '/'.join([parsing_feature_config.output_directory, parsing_feature_config.output_file_name])
+        output_file_path = f"{parsing_feature_config.output_directory}/{parsing_feature_config.output_file_name}"
 
         orig_stdout = sys.stdout
         output_file = open(output_file_path, 'w')
@@ -57,7 +57,7 @@ class Printer:
         # 1. root item is not has field name
         # 2. array elements does`t has field name
         if object_json_item.field_name is not None:
-            self._PrintWithPadding(layer_index, "".join(["\"", object_json_item.field_name, "\"", ":"]))
+            self._PrintWithPadding(layer_index, f"\"{object_json_item.field_name}\":")
 
         layer_delimiter_preset = self._GetLayerDelimiterPreset(object_json_item.is_array)
         self._PrintWithPadding(layer_index, layer_delimiter_preset.opening_part)
@@ -70,7 +70,7 @@ class Printer:
             self._PrintInternal(inner_json_item, next_layer_index, inner_object_need_comma)
 
         comma = "," if need_comma else ""
-        self._PrintWithPadding(layer_index, ''.join([layer_delimiter_preset.closing_part, comma]))
+        self._PrintWithPadding(layer_index, f"{layer_delimiter_preset.closing_part}{comma}")
 
     def _PrintValueFieldJsonItem(self, value_field_json_item: ValueFieldJsonItem, layer_index: int, need_comma: bool):
         value_builder: list[str] = []
@@ -96,7 +96,7 @@ class Printer:
             elif field_value == "false" or field_value == "0":
                 result_value = "false"
             else:
-                result_value = ''.join(["<error>", field_value, "</error>"])
+                result_value = f"<error>{field_value}</error>"
 
             value_builder.append(str(result_value))
         else:
@@ -114,4 +114,4 @@ class Printer:
             LayerDelimiterPreset('{', '}')
 
     def _PrintWithPadding(self, layer_index: int, text: str):
-        print("".join([self.__padding_per_layer * layer_index, text]))
+        print(f"{self.__padding_per_layer * layer_index}{text}")
