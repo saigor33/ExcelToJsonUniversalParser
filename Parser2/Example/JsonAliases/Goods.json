@@ -1,0 +1,13 @@
+{
+	"HardGood":
+	{
+		"$type":"Common.GameplayConfigs.Player.HardGoodConfig",
+		"amount": "%amount%"
+	},
+	"SoftGood":
+	{
+		"$type":"Common.GameplayConfigs.Player.SoftGoodConfig",
+		"amount": 50
+	},
+	"ConstantExample": 12000
+}

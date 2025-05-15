@@ -2,9 +2,9 @@
 	"paddingPerLayer": "    ",
 	"debug":
 	{
-		"needPrintBenchmarks": true
+		"needPrintBenchmarks": false
 	},
-	"selectedSourceType":"GoogleSheets",
+	"selectedSourceType":"Excel",
 	"excelSource":
 	{
 		"excelFilePath": "../Example/Doc.xlsx",
@@ -76,6 +76,11 @@
 			]
 		}
 	},
+	"jsonAliasesFilePaths":
+	[
+		"../Example/JsonAliases/Goods.json",
+		"../Example/JsonAliases/SeasonStage.json"
+	],
 	"parsingFeatures":
 	[
 		{

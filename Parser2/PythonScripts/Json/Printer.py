@@ -1,7 +1,7 @@
+import json
 import os
 import sys
 import time
-
 from Configuration import FieldValueType
 from Json.BaseJsonItem import ObjectJsonItem, BaseJsonItem, ValueFieldJsonItem
 from Json.LayerDelimiterPreset import LayerDelimiterPreset
@@ -81,7 +81,9 @@ class Printer:
             value_builder.append("\"")
             value_builder.append(":")
             value_builder.append(" ")
-        if value_field_json_item.field_value_type == FieldValueType.String:
+        if value_field_json_item.field_value_type == FieldValueType.JsonAlias:
+            value_builder.append(value_field_json_item.field_value)
+        elif value_field_json_item.field_value_type == FieldValueType.String:
             value_builder.append("\"")
             value_builder.append(str(value_field_json_item.field_value))
             value_builder.append("\"")

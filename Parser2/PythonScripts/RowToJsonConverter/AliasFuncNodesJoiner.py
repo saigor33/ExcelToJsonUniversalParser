@@ -1,4 +1,5 @@
 from typing import Optional
+from RowToJsonConverter import AliasFuncStackLogFormatter
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
 from prettytable import PrettyTable
@@ -74,19 +75,10 @@ def _LogDuplicateAliasFuncArgNames(
     pretty_table.align['Alias func stack'] = 'l'
 
     highlight_duplicate_args = '\n'.join([LogFormatter.formatWarningColor(x) for x in duplicate_alias_func_arg_names])
-    formated_alias_stack = _FormatAliasFuncStack(alias_func_stack, alias_func_name)
+    formated_alias_stack = AliasFuncStackLogFormatter.stackFormat(alias_func_stack, alias_func_name)
     pretty_table.add_row([feature_name, field_name, formated_alias_stack, highlight_duplicate_args])
 
     print("".join([
         f"\t{LogFormatter.formatWarningColor('Warning: duplicate alias func arg name.')}\n",
         str(pretty_table)
     ]))
-
-
-def _FormatAliasFuncStack(alias_func_stack: list[str], alias_func_name: str) -> str:
-    log = \
-        [
-            f"->{alias_func_name}",
-            "\n".join(reversed(alias_func_stack)) if len(alias_func_stack) > 0 else "<start>",
-        ]
-    return "\n".join(log)

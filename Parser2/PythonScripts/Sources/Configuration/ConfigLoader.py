@@ -30,10 +30,12 @@ class ConfigLoader:
         else:
             raise Exception(f"Unknown source type '{selected_source_type}'")
 
+        json_aliases_file_paths: list[str] = self.__LoadJsonAliasesFilePaths(
+            config_json.get('jsonAliasesFilePaths', None))
         parsing_feature_configs: dict[str, ParsingFeatureConfig] = self.__LoadParsingFeatureConfigs(config_json)
 
         return Config(padding_per_layer, debug_config, selected_source_type, excel_source_config,
-                      google_sheets_source_config, parsing_feature_configs)
+                      google_sheets_source_config, parsing_feature_configs, json_aliases_file_paths)
 
     def __LoadJson(self):
         json_file = open(self.__config_file_path, "r")
@@ -84,6 +86,13 @@ class ConfigLoader:
 
         need_print_benchmarks = bool(config_json.get("needPrintBenchmarks", False))
         return DebugConfig(need_print_benchmarks)
+
+    @staticmethod
+    def __LoadJsonAliasesFilePaths(config_json) -> list[str]:
+        if config_json is None:
+            return DefaultValues.JsonAliasesFilePaths
+
+        return config_json
 
     @staticmethod
     def __LoadParsingFeatureConfigs(config_json) -> dict[str, ParsingFeatureConfig]:
