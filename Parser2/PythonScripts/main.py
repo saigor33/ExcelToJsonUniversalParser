@@ -5,7 +5,8 @@ import colorama
 import Json.Printer
 import ParsingWrapper
 import Tests.Benchmark
-from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
+from JsonAlias import AliasesLoader, Alias
+from RowToJsonConverter import AliasFuncResolverFactory
 from RowToJsonConverter.Node import Node
 from RowToJsonConverter.RefNodesJoiner import RefNodesJoiner
 from Sources import SourceWrapperAbstractFactory
@@ -21,6 +22,7 @@ def main(config_file_path: str):
     colorama.init()
 
     config: Config = ConfigLoader(config_file_path).Load()
+    json_aliases: dict[str, Alias] = AliasesLoader.load(config.json_aliases_file_paths)
 
     source_wrapper: BaseSourceWrapper = SourceWrapperAbstractFactory.create(config)
 
@@ -30,7 +32,8 @@ def main(config_file_path: str):
     load_alias_func_nodes_result: ParsingWrapper.LoadResult = \
         ParsingWrapper.load(ref_nodes_joiner, source_wrapper, source_wrapper.getAliasFuncsParsingConfig())
 
-    alias_func_resolver = AliasFuncResolver(load_alias_func_nodes_result.nodes_by_feature_name)
+    alias_func_resolver = AliasFuncResolverFactory.create(load_alias_func_nodes_result.nodes_by_feature_name,
+                                                          json_aliases)
 
     load_feature_nodes_result: ParsingWrapper.LoadResult = \
         ParsingWrapper.load(ref_nodes_joiner, source_wrapper, source_wrapper.getFeaturesParsingConfig())

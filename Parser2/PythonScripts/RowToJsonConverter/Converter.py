@@ -74,7 +74,8 @@ def _IsSubBlockEnded(block_row_index: int, end_block_row_index: int, rows: list[
 
 
 def _IsValueField(field_value_type):
-    return field_value_type == Configuration.FieldValueType.Number \
+    return field_value_type == Configuration.FieldValueType.JsonAlias \
+        or field_value_type == Configuration.FieldValueType.Number \
         or field_value_type == Configuration.FieldValueType.String \
         or field_value_type == Configuration.FieldValueType.Bool \
         or field_value_type == Configuration.FieldValueType.Null

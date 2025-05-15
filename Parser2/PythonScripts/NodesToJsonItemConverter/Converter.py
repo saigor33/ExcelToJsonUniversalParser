@@ -41,7 +41,8 @@ def _IsValueFieldNode(node: Node) -> bool:
     if len(node.inner_nodes) != 1:
         return False
 
-    return (node.inner_nodes[0].name == FieldValueType.String
+    return (node.inner_nodes[0].name == FieldValueType.JsonAlias
+            or node.inner_nodes[0].name == FieldValueType.String
             or node.inner_nodes[0].name == FieldValueType.Number
             or node.inner_nodes[0].name == FieldValueType.Null
             or node.inner_nodes[0].name == FieldValueType.Bool)
