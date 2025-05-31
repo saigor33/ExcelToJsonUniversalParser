@@ -9,5 +9,21 @@
 		"$type":"Common.GameplayConfigs.Player.SoftGoodConfig",
 		"amount": 50
 	},
-	"ConstantExample": 12000
+	"ConstantExample": 12000,
+	"HardGoodWithAnonymArg":
+	{
+		"$type":"Common.GameplayConfigs.Player.HardGoodConfig",
+		"amount": "%amount%",
+		"amount1": "%arg1%",
+		"amount2": "%arg2%",
+		"amount3": "%arg3%"
+	},
+	"HardGoodWithAnonymArg2":
+	{
+		"$type":"Common.GameplayConfigs.Player.HardGoodConfig",
+		"amount": "%arg1%",
+		"amount1": "%arg1%",
+		"amount2": "%arg2%",
+		"amount3": "%arg3%"
+	}
 }

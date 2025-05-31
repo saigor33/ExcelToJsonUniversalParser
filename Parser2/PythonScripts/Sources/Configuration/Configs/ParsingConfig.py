@@ -7,6 +7,7 @@ class ParsingConfig:
                  field_value_type_column_name: str,
                  field_value_column_name: str,
                  alias_func_arg_value_column_name: str,
+                 anonym_alias_func_arg_name_by_column_name: dict[str, str],
                  ordered_by_level_sheet_names: list[str]
                  ):
         self.start_parsing_row_index = start_parsing_row_index
@@ -16,4 +17,5 @@ class ParsingConfig:
         self.field_value_type_column_name = field_value_type_column_name
         self.field_value_column_name = field_value_column_name
         self.alias_func_arg_value_column_name = alias_func_arg_value_column_name
+        self.anonym_alias_func_arg_name_by_column_name = anonym_alias_func_arg_name_by_column_name
         self.ordered_by_level_sheet_names = ordered_by_level_sheet_names

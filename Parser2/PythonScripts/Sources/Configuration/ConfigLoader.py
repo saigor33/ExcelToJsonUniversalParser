@@ -123,6 +123,11 @@ class ConfigLoader:
         field_value_type_column_name = str(config_json['fieldValueTypeColumnName'])
         field_value_column_name = str(config_json['fieldValueColumnName'])
         alias_func_arg_value_column_name = str(config_json['aliasFuncArgValueColumnName'])
+
+        anonym_alias_func_arg_name_by_column_name = config_json.get('anonymAliasFuncArgNameByColumnName')
+        if not bool(anonym_alias_func_arg_name_by_column_name):
+            anonym_alias_func_arg_name_by_column_name = DefaultValues.AnonymAliasFuncArgNameByColumnName
+
         ordered_by_level_sheet_names = config_json['orderedByLevelSheetNames']
 
         return ParsingConfig(
@@ -133,4 +138,5 @@ class ConfigLoader:
             field_value_type_column_name,
             field_value_column_name,
             alias_func_arg_value_column_name,
+            anonym_alias_func_arg_name_by_column_name,
             ordered_by_level_sheet_names)
