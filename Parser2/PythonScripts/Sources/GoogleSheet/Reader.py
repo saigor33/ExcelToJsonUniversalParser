@@ -3,6 +3,7 @@ from typing import Optional
 from prettytable import PrettyTable
 
 from Sources import Row
+from Sources.Configuration import DefaultValues
 from Sources.GoogleSheet import DataLoader
 from Sources.GoogleSheet.RangeConfig import RangeConfig
 from Tests import LogFormatter
@@ -17,7 +18,8 @@ class SheetConfig:
             field_name_column_name: str,
             field_value_type_column_name: str,
             field_value_column_name: str,
-            alias_func_arg_value_column_name: str
+            alias_func_arg_value_column_name: str,
+            anonym_alias_func_arg_name_by_column_name: dict[str, str]
     ):
         self.start_parsing_row_index = start_parsing_row_index
         self.ignore_column_name = ignore_column_name
@@ -26,6 +28,7 @@ class SheetConfig:
         self.field_value_type_column_name = field_value_type_column_name
         self.field_value_column_name = field_value_column_name
         self.alias_func_arg_value_column_name = alias_func_arg_value_column_name
+        self.anonym_alias_func_arg_name_by_column_name = anonym_alias_func_arg_name_by_column_name
 
 
 def read(
@@ -75,13 +78,24 @@ def CovertDataToRow(sheet_configs_by_sheet_name: dict[str, SheetConfig], range_c
         alias_func_arg_value_range: list[str] = \
             _GetRangeValues(range_configs, sheet_name, arg_value_column_name, sheet_data_by_range_config_id)
 
+        max_anonym_args_value_range_rows_count = 0
+
+        anonym_args_value_range_by_column_name: dict[str, list[str]] = {}
+        for anonym_args_column_name in sheet_config.anonym_alias_func_arg_name_by_column_name.keys():
+            range_values = _GetRangeValues(range_configs, sheet_name, anonym_args_column_name,
+                                           sheet_data_by_range_config_id)
+
+            max_anonym_args_value_range_rows_count = max(max_anonym_args_value_range_rows_count, len(range_values))
+            anonym_args_value_range_by_column_name[anonym_args_column_name] = range_values
+
         max_rows_count = max(
             len(ignore_rows_range),
             len(link_id_range),
             len(field_name_range),
             len(field_value_type_range),
             len(field_value_range),
-            len(alias_func_arg_value_range)
+            len(alias_func_arg_value_range),
+            max_anonym_args_value_range_rows_count
         )
 
         rows: list[Row] = []
@@ -101,11 +115,31 @@ def CovertDataToRow(sheet_configs_by_sheet_name: dict[str, SheetConfig], range_c
                         and alias_func_arg_value is None)
 
                 if not is_empty_row:
-                    row = Row.Row(row_index, link_id, field_name, field_value_type, field_value, alias_func_arg_value)
+                    anonym_args: Optional[dict[str, str]] = \
+                        __ReadAnonymArgs(anonym_args_value_range_by_column_name, row_index,
+                                         sheet_config.anonym_alias_func_arg_name_by_column_name)
+
+                    row = Row.Row(row_index, link_id, field_name, field_value_type, field_value, alias_func_arg_value,
+                                  anonym_args)
                     rows.append(row)
 
         rows_by_sheet_name[sheet_name] = rows
     return rows_by_sheet_name
+
+
+def __ReadAnonymArgs(anonym_args_value_range_by_column_name: dict[str, list[str]], row_index,
+                     anonym_alias_func_arg_name_by_column_name: dict[str, str]) -> Optional[dict[str, str]]:
+    result: Optional[dict[str, str]] = None
+
+    for column_name, values_range in anonym_args_value_range_by_column_name.items():
+        cell_value = _ReadCellValue(values_range, row_index)
+        if cell_value is not None:
+            if result is None:
+                result = {}
+            arg_name = anonym_alias_func_arg_name_by_column_name[column_name]
+            result[arg_name] = cell_value
+
+    return result
 
 
 def _GenerateRangeConfigs(sheet_configs_by_sheet_name: dict[str, SheetConfig]) -> list[RangeConfig]:
@@ -126,6 +160,10 @@ def _GenerateRangeConfigs(sheet_configs_by_sheet_name: dict[str, SheetConfig]) -
         result.append(_GenerateRangeConfig(sheet_name, value_type_column_name, value_type_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, field_value_column_name, field_value_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, arg_value_column_name, arg_value_column_name, start_index))
+
+        for anonym_args_column_name in sheet_config.anonym_alias_func_arg_name_by_column_name.keys():
+            result.append(
+                _GenerateRangeConfig(sheet_name, anonym_args_column_name, anonym_args_column_name, start_index))
 
     return result
 

@@ -26,7 +26,8 @@ class SourceWrapper(BaseSourceWrapper):
                 field_name_column_name=parsing_config.field_name_column_name,
                 field_value_type_column_name=parsing_config.field_value_type_column_name,
                 field_value_column_name=parsing_config.field_value_column_name,
-                alias_func_arg_value_column_name=parsing_config.alias_func_arg_value_column_name
+                alias_func_arg_value_column_name=parsing_config.alias_func_arg_value_column_name,
+                anonym_alias_func_arg_name_by_column_name=parsing_config.anonym_alias_func_arg_name_by_column_name
             )
 
         return GoogleSheetReader.read(

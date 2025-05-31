@@ -43,7 +43,25 @@ def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing
                     and alias_func_arg_value is None)
 
             if not is_empty_row:
-                result.append(Row(index, link_id, field_name, field_value_type, field_value, alias_func_arg_value))
+                anonym_args: Optional[dict[str, str]] = \
+                    __ReadAnonymArgs(excel_row, parsing_config.anonym_alias_func_arg_name_by_column_name)
+                visible_number = _ConvertIndexToVisibleNumber(index)
+                row = Row(visible_number, link_id, field_name, field_value_type, field_value, alias_func_arg_value,
+                          anonym_args)
+                result.append(row)
+
+    return result
+
+
+def __ReadAnonymArgs(excel_row, anonym_alias_func_arg_name_by_column_name: dict[str, str]) -> Optional[dict[str, str]]:
+    result: Optional[dict[str, str]] = None
+
+    for column_name, arg_name in anonym_alias_func_arg_name_by_column_name.items():
+        cell_value = _ReadCellValue(excel_row, column_name)
+        if cell_value is not None:
+            if result is None:
+                result = {}
+            result[arg_name] = cell_value
 
     return result
 
@@ -81,3 +99,10 @@ def _ReadCellValue(excel_row, column_name: str) -> Optional[str]:
 
 def _IsEmptyCell(ignore_value):
     return pandas.isna(ignore_value) or pandas.isnull(ignore_value)
+
+
+def _ConvertIndexToVisibleNumber(index: int) -> int:
+    hidden_title = 1
+    title = 1
+
+    return index + hidden_title + title

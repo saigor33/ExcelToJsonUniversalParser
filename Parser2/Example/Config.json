@@ -17,6 +17,12 @@
 			"fieldValueTypeColumnName":"type",
 			"fieldValueColumnName":"value",
 			"aliasFuncArgValueColumnName": "aliasFuncArg",
+			"anonymAliasFuncArgNameByColumnName":
+			{
+				"arg1": "arg1",
+				"arg2": "arg2",
+				"arg3": "arg3"
+			},
 			"orderedByLevelSheetNames":
 			[
 				"AliasFuncsLvl0",
@@ -32,6 +38,12 @@
 			"fieldValueTypeColumnName":"type",
 			"fieldValueColumnName":"value",
 			"aliasFuncArgValueColumnName": "aliasFuncArg",
+			"anonymAliasFuncArgNameByColumnName":
+			{
+				"arg1": "arg1",
+				"arg2": "arg2",
+				"arg3": "arg3"
+			},
 			"orderedByLevelSheetNames":
 			[
 				"Lvl0",
@@ -53,6 +65,12 @@
 			"fieldValueTypeColumnName":"E",
 			"fieldValueColumnName":"F",
 			"aliasFuncArgValueColumnName": "G",
+			"anonymAliasFuncArgNameByColumnName":
+			{
+				"H": "arg1",
+				"I": "arg2",
+				"J": "arg3"
+			},
 			"orderedByLevelSheetNames":
 			[
 				"AliasFuncsLvl0",
@@ -68,6 +86,12 @@
 			"fieldValueTypeColumnName":"E",
 			"fieldValueColumnName":"F",
 			"aliasFuncArgValueColumnName": "G",
+			"anonymAliasFuncArgNameByColumnName":
+			{
+				"H": "arg1",
+				"I": "arg2",
+				"J": "arg3"
+			},
 			"orderedByLevelSheetNames":
 			[
 				"Lvl0",
