@@ -122,7 +122,7 @@ class ConfigLoader:
         field_name_column_name = str(config_json['fieldNameColumnName'])
         field_value_type_column_name = str(config_json['fieldValueTypeColumnName'])
         field_value_column_name = str(config_json['fieldValueColumnName'])
-        alias_func_arg_value_column_name = str(config_json['aliasFuncArgValueColumnName'])
+        alias_func_arg_value_column_name: Optional[str] = config_json.get('aliasFuncArgValueColumnName', None)
 
         anonym_alias_func_arg_name_by_column_name = config_json.get('anonymAliasFuncArgNameByColumnName')
         if not bool(anonym_alias_func_arg_name_by_column_name):

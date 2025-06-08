@@ -33,7 +33,11 @@ def _ReadRows(sheet_name: str, excel_sheet_data_frame: pandas.DataFrame, parsing
             field_name = _ReadCellValue(excel_row, parsing_config.field_name_column_name)
             field_value_type = _ReadCellValue(excel_row, parsing_config.field_value_type_column_name)
             field_value = _ReadCellValue(excel_row, parsing_config.field_value_column_name)
-            alias_func_arg_value = _ReadCellValue(excel_row, parsing_config.alias_func_arg_value_column_name)
+
+            alias_func_arg_value = None
+            alias_func_arg_value_column_name = parsing_config.alias_func_arg_value_column_name
+            if alias_func_arg_value_column_name is not None:
+                alias_func_arg_value = _ReadCellValue(excel_row, alias_func_arg_value_column_name)
 
             is_empty_row = (
                     link_id is None

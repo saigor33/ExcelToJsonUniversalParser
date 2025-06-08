@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class ParsingConfig:
     def __init__(self,
                  start_parsing_row_index: int,
@@ -6,7 +9,7 @@ class ParsingConfig:
                  field_name_column_name: str,
                  field_value_type_column_name: str,
                  field_value_column_name: str,
-                 alias_func_arg_value_column_name: str,
+                 alias_func_arg_value_column_name: Optional[str],
                  anonym_alias_func_arg_name_by_column_name: dict[str, str],
                  ordered_by_level_sheet_names: list[str]
                  ):

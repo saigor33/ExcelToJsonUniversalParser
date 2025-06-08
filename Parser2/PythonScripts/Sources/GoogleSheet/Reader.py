@@ -18,7 +18,7 @@ class SheetConfig:
             field_name_column_name: str,
             field_value_type_column_name: str,
             field_value_column_name: str,
-            alias_func_arg_value_column_name: str,
+            alias_func_arg_value_column_name: Optional[str],
             anonym_alias_func_arg_name_by_column_name: dict[str, str]
     ):
         self.start_parsing_row_index = start_parsing_row_index
@@ -63,7 +63,7 @@ def CovertDataToRow(sheet_configs_by_sheet_name: dict[str, SheetConfig], range_c
         field_name_column_name = sheet_config.field_name_column_name
         value_type_column_name = sheet_config.field_value_type_column_name
         field_value_column_name = sheet_config.field_value_column_name
-        arg_value_column_name = sheet_config.alias_func_arg_value_column_name
+        arg_value_column_name: Optional[str] = sheet_config.alias_func_arg_value_column_name
 
         ignore_rows_range: list[str] = \
             _GetRangeValues(range_configs, sheet_name, ignore_column_name, sheet_data_by_range_config_id)
@@ -76,7 +76,8 @@ def CovertDataToRow(sheet_configs_by_sheet_name: dict[str, SheetConfig], range_c
         field_value_range: list[str] = \
             _GetRangeValues(range_configs, sheet_name, field_value_column_name, sheet_data_by_range_config_id)
         alias_func_arg_value_range: list[str] = \
-            _GetRangeValues(range_configs, sheet_name, arg_value_column_name, sheet_data_by_range_config_id)
+            _GetRangeValues(range_configs, sheet_name, arg_value_column_name,
+                            sheet_data_by_range_config_id) if arg_value_column_name is not None else []
 
         max_anonym_args_value_range_rows_count = 0
 
@@ -152,14 +153,16 @@ def _GenerateRangeConfigs(sheet_configs_by_sheet_name: dict[str, SheetConfig]) -
         field_name_column_name = sheet_config.field_name_column_name
         value_type_column_name = sheet_config.field_value_type_column_name
         field_value_column_name = sheet_config.field_value_column_name
-        arg_value_column_name = sheet_config.alias_func_arg_value_column_name
+        arg_value_column_name: Optional[str] = sheet_config.alias_func_arg_value_column_name
 
         result.append(_GenerateRangeConfig(sheet_name, ignore_column_name, ignore_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, link_id_column_name, link_id_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, field_name_column_name, field_name_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, value_type_column_name, value_type_column_name, start_index))
         result.append(_GenerateRangeConfig(sheet_name, field_value_column_name, field_value_column_name, start_index))
-        result.append(_GenerateRangeConfig(sheet_name, arg_value_column_name, arg_value_column_name, start_index))
+
+        if arg_value_column_name is not None:
+            result.append(_GenerateRangeConfig(sheet_name, arg_value_column_name, arg_value_column_name, start_index))
 
         for anonym_args_column_name in sheet_config.anonym_alias_func_arg_name_by_column_name.keys():
             result.append(
