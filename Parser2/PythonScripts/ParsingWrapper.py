@@ -2,6 +2,8 @@ import time
 import Json.Printer
 import NodesToJsonItemConverter
 import NodesToJsonItemConverter.Converter
+from typing import Optional
+from prettytable import PrettyTable
 from RowToJsonConverter import NodesLayerBuilder, Converter, AliasFuncNodesJoiner
 from RowToJsonConverter.AliasFuncResolver import AliasFuncResolver
 from RowToJsonConverter.Node import Node
@@ -11,6 +13,7 @@ from Sources.BaseSourceWrapper import BaseSourceWrapper
 from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
 from Sources.Configuration.Configs.ParsingFeatureConfig import ParsingFeatureConfig
 from Sources.Row import Row
+from Tests import LogFormatter
 
 
 class LoadResult:
@@ -128,12 +131,40 @@ def printJsons(parsing_feature_by_feature_name: dict[str, ParsingFeatureConfig],
                nodes_by_feature: dict[str, Node]) -> PrintJsonsResult:
     start_time = time.time()
 
-    duration_by_feature_name: dict[str, Json.Printer.Result] = {}
+    print_result_by_feature_name: dict[str, Json.Printer.Result] = {}
+
+    missing_feature_names: Optional[list[str]] = None
     for feature_name, parsing_feature in parsing_feature_by_feature_name.items():
-        # check exists feature_name in nodes_by_feature
-        json_item = NodesToJsonItemConverter.Converter.convert(nodes_by_feature[feature_name])
-        print_result: Json.Printer = json_printer.print(parsing_feature, json_item)
-        duration_by_feature_name[feature_name] = print_result
+        if feature_name in nodes_by_feature:
+            json_item = NodesToJsonItemConverter.Converter.convert(nodes_by_feature[feature_name])
+            print_result: Json.Printer.Result = json_printer.print(parsing_feature, json_item)
+            print_result_by_feature_name[feature_name] = print_result
+        else:
+            if missing_feature_names is None:
+                missing_feature_names = []
+            missing_feature_names.append(feature_name)
+
+    if bool(missing_feature_names):
+        _LogMissingPrintFeature(missing_feature_names, list(nodes_by_feature.keys()))
 
     duration: float = time.time() - start_time
-    return PrintJsonsResult(duration_by_feature_name, duration)
+    return PrintJsonsResult(print_result_by_feature_name, duration)
+
+
+def _LogMissingPrintFeature(missing_feature_names: list[str], found_feature_names: list[str]):
+    pretty_table = PrettyTable()
+    pretty_table.field_names = ['Missing feature names', 'Found feature names']
+    pretty_table.align['Missing feature names'] = 'l'
+    pretty_table.align['Found feature names'] = 'l'
+    pretty_table.add_row([
+        LogFormatter.formatWarningColor('\n'.join(missing_feature_names)),
+        '\n'.join(found_feature_names)
+    ],
+        divider=True)
+
+    print("".join([
+        "\t"
+        f"{LogFormatter.formatWarningColor('Warning. Feature not found')}",
+        "\n"
+        f"{str(pretty_table)}"
+    ]))
