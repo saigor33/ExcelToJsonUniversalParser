@@ -1,0 +1,49 @@
+{
+	"selectedSourceType":"Excel",
+	"excelSource":
+	{
+		"excelFilePath": "../Example/Instruction/Instruction.xlsx",
+		"featuresParsing": 
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "ignore",
+			"linkIdColumnName": "id",
+			"fieldNameColumnName":"name",
+			"fieldValueTypeColumnName":"type",
+			"fieldValueColumnName":"value",
+			"orderedByLevelSheetNames":
+			[
+				"Lvl0",
+				"Lvl1",
+				"Lvl2"
+			]
+		}
+	},
+	"googleSheetsSource":
+	{
+		"credentialsFilePath": "../Example/credentials.json",
+		"spreadsheetId": "1lzM-Hp5n5avQ8c-2qiTImIC487HOzAWSRQYNAmUs3TM",
+		"featuresParsing": 
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "B",
+			"linkIdColumnName": "C",
+			"fieldNameColumnName":"D",
+			"fieldValueTypeColumnName":"E",
+			"fieldValueColumnName":"F",
+			"aliasFuncArgValueColumnName": "G",
+			"orderedByLevelSheetNames":
+			[
+				"NewLvl0"
+			]
+		}
+	},
+	"parsingFeatures":
+	[
+		{
+			"featureName": "example1",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example1.json"
+		}
+	]
+}
