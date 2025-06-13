@@ -27,6 +27,11 @@
 			"featureName": "example1",
 			"outputDirectory": "../Example/Temp/Output",
 			"outputFileName": "Example1.json"
+		},
+		{
+			"featureName": "example2",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example2.json"
 		}
 	]
 }
