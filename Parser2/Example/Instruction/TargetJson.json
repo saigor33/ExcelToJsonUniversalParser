@@ -1,10 +1,10 @@
 {
 	"name": "Igor",
-	"suname": "Skladchikov",
+	"surname": "Skladchikov",
 	"age": 28,
-	"Adress":
+	"adress":
 	{
-		"Country": "Russian",
-		"City": "Saint Petersburg"
+		"country": "Russian",
+		"city": "Saint Petersburg"
 	}
 }

@@ -1,0 +1,37 @@
+graph TD;
+    subgraph Layer0
+    json[json]
+    end
+
+    subgraph Layer1
+    json-->field0;
+    json-->field1;
+    json-->field2;
+    end
+
+    subgraph Layer2
+    field0_sub_field0[sub_field0]
+    field0_sub_field1[sub_field1]
+    field0_sub_field2[sub_field2]
+
+    field1_sub_field0[sub_field0]
+    field1_sub_field1[sub_field1]
+
+    field0-->field0_sub_field0;
+    field0-->field0_sub_field1;
+    field0-->field0_sub_field2;
+
+    field1-->field1_sub_field0;
+    field1-->field1_sub_field1;
+
+    field2-->text0;
+    end
+
+    subgraph Layer3
+    field0_sub_field0-->1;
+    field0_sub_field1-->15;
+    field0_sub_field2-->20;
+
+    field1_sub_field0-->text1;
+    field1_sub_field1-->text2;
+    end
