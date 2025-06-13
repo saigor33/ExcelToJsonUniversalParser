@@ -1,6 +1,8 @@
 import pandas
 from typing import Optional
 from prettytable import PrettyTable
+
+from ParsingWrapper import ConvertRowsToNodesResult
 from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
 from Sources.Row import Row
 from Tests import LogFormatter
@@ -89,14 +91,7 @@ def _NeedIgnoreRow(sheet_name: str, row_index: int, excel_row, ignore_column_nam
     if ignore_value == 'false' or ignore_value == '0' or ignore_value == '0.0':
         return False
 
-    print(LogFormatter.formatWarningColor('Warning: ignore type should be bool.'))
-
-    table = PrettyTable()
-    table.field_names = ["Sheet name", "Row index", "ignore", ]
-    highlighted_ignore_value = LogFormatter.formatWarningColor(ignore_value)
-    table.add_row([sheet_name, row_index, highlighted_ignore_value])
-
-    print(f"{str(table)}\n")
+    _LogIgnoreTypeShouldBeBool(sheet_name, row_index, ignore_value)
     return False
 
 
@@ -117,6 +112,21 @@ def _ConvertIndexToVisibleNumber(index: int) -> int:
     title = 1
 
     return index + hidden_title + title
+
+
+def _LogIgnoreTypeShouldBeBool(sheet_name, row_index, ignore_value):
+    pretty_table = PrettyTable()
+    pretty_table.field_names = ["Sheet name", "Row number", "Ignore value"]
+
+    highlighted_ignore_value = LogFormatter.formatWarningColor(ignore_value)
+    row_visible_number = _ConvertIndexToVisibleNumber(row_index)
+    pretty_table.add_row([sheet_name, row_visible_number, highlighted_ignore_value])
+
+    print(''.join([
+        f'\n\t{LogFormatter.formatWarning("Ignore type should be bool")}',
+        f'\n\tRow will be used for parsing',
+        f'\n{str(pretty_table)}'
+    ]))
 
 
 def _LogSheetNamesNotFound(missing_sheet_names: list[str]):

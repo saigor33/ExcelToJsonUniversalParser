@@ -1,9 +1,6 @@
 from typing import Optional
-
 from prettytable import PrettyTable
-
 from Sources import Row
-from Sources.Configuration import DefaultValues
 from Sources.GoogleSheet import DataLoader
 from Sources.GoogleSheet.RangeConfig import RangeConfig
 from Tests import LogFormatter
@@ -189,14 +186,7 @@ def _NeedIgnoreRow(sheet_name: str, ignore_rows_range: list[str], row_index: int
     if ignore_value == 'false' or ignore_value == '0' or ignore_value == '0.0':
         return False
 
-    print(LogFormatter.formatWarningColor('Warning: ignore type should be bool.'))
-
-    table = PrettyTable()
-    table.field_names = ["Sheet name", "Row index", "ignore", ]
-    highlighted_ignore_value = LogFormatter.formatWarningColor(ignore_value)
-    table.add_row([sheet_name, row_index, highlighted_ignore_value])
-
-    print(f"{str(table)}\n")
+    _LogIgnoreTypeShouldBeBool(sheet_name, row_index, ignore_value)
     return False
 
 
@@ -212,3 +202,17 @@ def _ReadCellValue(rows_range, row_index) -> Optional[str]:
         raise Exception("Unsupported number of rows", values_count)
 
     return rows_range[row_index][0].strip()
+
+
+def _LogIgnoreTypeShouldBeBool(sheet_name, row_index, ignore_value):
+    pretty_table = PrettyTable()
+    pretty_table.field_names = ["Sheet name", "Row number", "Ignore value"]
+
+    highlighted_ignore_value = LogFormatter.formatWarningColor(ignore_value)
+    pretty_table.add_row([sheet_name, row_index, highlighted_ignore_value])
+
+    print(''.join([
+        f'\n\t{LogFormatter.formatWarning("Ignore type should be bool")}',
+        f'\n\tRow will be used for parsing',
+        f'\n{str(pretty_table)}'
+    ]))
