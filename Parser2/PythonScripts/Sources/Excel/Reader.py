@@ -12,7 +12,7 @@ def read(excel_file_path: str, parsing_config: ParsingConfig) -> dict[str, list[
 
     for sheet_name in parsing_config.ordered_by_level_sheet_names:
         if sheet_name in excel_file.sheet_names:
-            excel_sheet_data_frame = excel_file.parse(sheet_name, index_col=None)
+            excel_sheet_data_frame = excel_file.parse(sheet_name, index_col=None, na_values='', keep_default_na=False)
             rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
         else:
             print(LogFormatter.formatErrorColor(f"Error: sheet name '{sheet_name}' not found."))
