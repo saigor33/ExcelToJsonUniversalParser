@@ -1,0 +1,12 @@
+{
+	"field1": "text",
+	"field2": 123,
+	"field3": true,
+	"field4": null,
+	"field5": 
+	{
+	}
+	"field6": 
+	[
+	]
+}
