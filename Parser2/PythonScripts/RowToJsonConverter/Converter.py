@@ -46,6 +46,9 @@ def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_inde
             ref_node = Node(Configuration.ReferenceType.Ref, row.field_value, [])
             inner_nodes.append(Node(row.field_name, field_value_type, [ref_node]))
         elif field_value_type is None:
+            # 0. Has only linkId. If next layer field is empty
+            if not __IsEmptyLinkIdBlock(row):
+                __LogEmptyTypeRow(sheet_name, row.visible_number, row)
             pass
         else:
             alias_func_name = field_value_type
@@ -103,6 +106,40 @@ def _IsValueField(field_value_type):
         or field_value_type == Configuration.FieldValueType.String \
         or field_value_type == Configuration.FieldValueType.Bool \
         or field_value_type == Configuration.FieldValueType.Null
+
+
+def __IsEmptyLinkIdBlock(row: Row):
+    return row.link_id is not None \
+        and row.field_name is None \
+        and row.field_value is None \
+        and row.alias_func_arg_value is None \
+        and row.anonym_args is None
+
+def __LogEmptyTypeRow(sheet_name: str, row_visible_number: int, row: Row):
+    pretty_table = PrettyTable()
+    pretty_table.field_names = ['Parameter', 'Description']
+    pretty_table.align['Parameter'] = 'l'
+    pretty_table.add_row(["Sheet name", sheet_name], divider=True)
+    pretty_table.add_row(["Row number", row_visible_number], divider=True)
+
+    row_content_pretty_table = PrettyTable()
+    row_content_pretty_table.field_names = ['Parameter', 'Value']
+    row_content_pretty_table.align['Parameter'] = 'l'
+    row_content_pretty_table.align['Value'] = 'l'
+    row_content_pretty_table.add_row(["link_id", row.link_id], divider=False)
+    row_content_pretty_table.add_row(["field_name", row.field_name], divider=False)
+    highlight_field_value_type = LogFormatter.formatWarningColor(row.field_value_type)
+    row_content_pretty_table.add_row(["field_value_type", highlight_field_value_type], divider=False)
+    row_content_pretty_table.add_row(["field_value", row.field_value], divider=False)
+    row_content_pretty_table.add_row(["alias_func_arg_value", row.alias_func_arg_value], divider=False)
+    row_content_pretty_table.add_row(["anonym_args", row.anonym_args], divider=False)
+
+    pretty_table.add_row(["Row content", str(row_content_pretty_table)], divider=True)
+
+    print("".join([
+        f"\n\t{LogFormatter.formatWarningColor('Warning. Missing value type')}",
+        f"\n{str(pretty_table)}"
+    ]))
 
 
 def __LogTwiceAddAnonymArgs(sheet_name: str, start_block_visible_number: int, end_block_visible_number: int,
