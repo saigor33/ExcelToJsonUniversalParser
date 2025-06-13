@@ -21,7 +21,7 @@
 	"googleSheetsSource":
 	{
 	},
-	"parsingFeatures":
+	"features":
 	[
 		{
 			"featureName": "example1",
