@@ -161,7 +161,8 @@ def printJsons(parsing_feature_by_feature_name: dict[str, ParsingFeatureConfig],
             missing_feature_names.append(feature_name)
 
     if bool(missing_feature_names):
-        _LogMissingPrintFeature(missing_feature_names, list(nodes_by_feature.keys()))
+        found_feature_names = list(filter(lambda name: name is not None, nodes_by_feature.keys()))
+        _LogMissingPrintFeature(missing_feature_names, found_feature_names)
 
     duration: float = time.time() - start_time
     return PrintJsonsResult(print_result_by_feature_name, duration)
