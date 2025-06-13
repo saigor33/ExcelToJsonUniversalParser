@@ -1,0 +1,10 @@
+{
+	"name": "Igor",
+	"suname": "Skladchikov",
+	"age": 28,
+	"Adress":
+	{
+		"Country": "Russian",
+		"City": "Saint Petersburg"
+	}
+}

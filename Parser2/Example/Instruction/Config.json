@@ -14,29 +14,12 @@
 			"orderedByLevelSheetNames":
 			[
 				"Lvl0",
-				"Lvl1",
-				"Lvl2"
+				"Lvl1"
 			]
 		}
 	},
 	"googleSheetsSource":
 	{
-		"credentialsFilePath": "../Example/credentials.json",
-		"spreadsheetId": "1lzM-Hp5n5avQ8c-2qiTImIC487HOzAWSRQYNAmUs3TM",
-		"featuresParsing": 
-		{
-			"startParsingRowIndex": 3,
-			"ignoreColumnName": "B",
-			"linkIdColumnName": "C",
-			"fieldNameColumnName":"D",
-			"fieldValueTypeColumnName":"E",
-			"fieldValueColumnName":"F",
-			"aliasFuncArgValueColumnName": "G",
-			"orderedByLevelSheetNames":
-			[
-				"NewLvl0"
-			]
-		}
 	},
 	"parsingFeatures":
 	[
