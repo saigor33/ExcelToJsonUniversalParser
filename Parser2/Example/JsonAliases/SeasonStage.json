@@ -1,8 +1,0 @@
-{
-	"SeasonStage":
-	{
-		"$type":"Common.GameplayConfigs.Player.SeasonStage",
-		"targetPoints": 1000,
-		"isPremium": true
-	}
-}

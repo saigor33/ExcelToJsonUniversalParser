@@ -1,0 +1,10 @@
+{
+	"jsonFuncArgsPositionVariations": 
+	{
+		"field1": "%amount:num%",
+		"field2": "\"%amount:num%\"",
+		"field3": "\"%amount:num%\" text text",
+		"field4": "text %amount:num% text",
+		"field5": "text text \"%amount:num%\""
+	}
+}

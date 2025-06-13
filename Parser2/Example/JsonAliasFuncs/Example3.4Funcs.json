@@ -1,0 +1,14 @@
+{
+	"Example3.4_jsonFunc":
+	{
+		"field1": "%arg1:num%",
+		"field2": "\"%arg2:str%\"",
+		"field3": "%arg3:bool%"
+	},
+	"Example3.4_jsonFuncWithTypedArg":
+	{
+		"field1": "%amount:num%",
+		"field2": "\"%arg2:str%\"",
+		"field3": "%arg3:bool%"
+	}
+}
