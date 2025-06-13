@@ -53,8 +53,6 @@ class RefNodesJoiner:
                                                                                 nodes_layer.next_nodes_layer)
                     return next_layer_node.inner_nodes
 
-        print(LogFormatter.formatErrorColor('Error: Missing ref value'))
-
         table = PrettyTable()
         table.field_names = ['Search sheet name', 'id']
 
@@ -71,6 +69,7 @@ class RefNodesJoiner:
 
         table.add_row([sheet_name, missing_id])
         error: list[str] = [
+            f'\n\t{LogFormatter.formatErrorColor("Error. Missing ref value")}'
             f'\n\tDescription: {description}',
             f'\n{str(table)}',
             f'\n'
