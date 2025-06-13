@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 from Configuration import FieldValueType
 from JsonAlias import Alias
-from RowToJsonConverter import AliasFuncNodesJoiner
+from RowToJsonConverter import AliasFuncNodesJoiner, AliasFuncStackLogFormatter
 from RowToJsonConverter.AliasFunc import AliasFunc
 from RowToJsonConverter.Node import Node
 from Tests import LogFormatter
@@ -18,8 +18,7 @@ class AliasFuncResolver:
     def resolve(self, feature_name: str, alias_func_name: str, alias_func_args: dict[str, str],
                 alias_func_stack: list[str]) -> Node:
         if alias_func_name in alias_func_stack:
-            # todo: format print
-            print(f"Infinite loop detected stack={alias_func_stack}, current_alias_func={alias_func_name}")
+            self.__LogInfiniteLoopAliasFunc(feature_name, alias_func_name, alias_func_stack)
             return Node(alias_func_name, str(alias_func_args), [])
 
         if alias_func_name in self.__json_aliases:
@@ -49,5 +48,21 @@ class AliasFuncResolver:
 
         print(''.join([
             f'\n\t{LogFormatter.formatWarning("Missing alias func")}',
+            f'\n{str(pretty_table)}'
+        ]))
+
+    @staticmethod
+    def __LogInfiniteLoopAliasFunc(feature_name: str, alias_func_name: str, alias_func_stack: list[str]):
+        pretty_table = PrettyTable()
+        pretty_table.field_names = ['Parameter', 'Description']
+        pretty_table.align['Parameter'] = 'l'
+        pretty_table.align['Description'] = 'l'
+
+        pretty_table.add_row(["Feature name", feature_name], divider=True)
+        pretty_table.add_row(["Alias func name", LogFormatter.formatWarningColor(alias_func_name)], divider=True)
+        stack_format = AliasFuncStackLogFormatter.stackFormat(alias_func_stack, alias_func_name)
+        pretty_table.add_row(["Alias func stack", stack_format], divider=True)
+        print(''.join([
+            f'\n\t{LogFormatter.formatWarning("Infinite alias funcs loop detected")}',
             f'\n{str(pretty_table)}'
         ]))
