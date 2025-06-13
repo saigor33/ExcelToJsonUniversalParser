@@ -98,9 +98,9 @@ class ConfigLoader:
 
     @staticmethod
     def __LoadParsingFeatureConfigs(config_json) -> dict[str, ParsingFeatureConfig]:
-        parsing_features_json = config_json.get('parsingFeatures')
+        parsing_features_json = config_json.get('features')
         if parsing_features_json is None:
-            raise Exception("'parsingFeatures' not filled")
+            raise Exception("'features' not filled")
 
         result: dict[str, ParsingFeatureConfig] = {}
 
