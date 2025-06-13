@@ -1,3 +1,5 @@
+from typing import Optional
+
 from Sources.Configuration.Configs.ParsingConfig import ParsingConfig
 
 
@@ -7,7 +9,7 @@ class GoogleSheetsSourceConfig:
             credentials_file_path: str,
             spreadsheet_id: str,
             features_parsing: ParsingConfig,
-            alias_funcs_parsing: ParsingConfig
+            alias_funcs_parsing: Optional[ParsingConfig]
     ):
         self.credentials_file_path = credentials_file_path
         self.spreadsheet_id = spreadsheet_id

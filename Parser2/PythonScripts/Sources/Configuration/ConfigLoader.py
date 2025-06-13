@@ -54,7 +54,8 @@ class ConfigLoader:
 
         excel_file_path: str = config_json['excelFilePath']
         features_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['featuresParsing'])
-        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['aliasFuncsParsing'])
+        alias_funcs_parsing_config: Optional[ParsingConfig] = \
+            self.__LoadParsingConfig(config_json.get('aliasFuncsParsing'))
 
         return ExcelSourceConfig(excel_file_path, features_parsing_config, alias_funcs_parsing_config)
 
@@ -65,7 +66,8 @@ class ConfigLoader:
         credentials_file_path: str = config_json['credentialsFilePath']
         spreadsheet_id: str = config_json['spreadsheetId']
         features_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['featuresParsing'])
-        alias_funcs_parsing_config: ParsingConfig = self.__LoadParsingConfig(config_json['aliasFuncsParsing'])
+        alias_funcs_parsing_config: Optional[ParsingConfig] = \
+            self.__LoadParsingConfig(config_json.get('aliasFuncsParsing'))
 
         return GoogleSheetsSourceConfig(credentials_file_path, spreadsheet_id, features_parsing_config,
                                         alias_funcs_parsing_config)
@@ -115,7 +117,10 @@ class ConfigLoader:
         return result
 
     @staticmethod
-    def __LoadParsingConfig(config_json) -> ParsingConfig:
+    def __LoadParsingConfig(config_json) -> Optional[ParsingConfig]:
+        if config_json is None:
+            return None
+
         start_parsing_row_index = int(config_json['startParsingRowIndex'])
         ignore_column_name = str(config_json['ignoreColumnName'])
         link_id_column_name = str(config_json['linkIdColumnName'])

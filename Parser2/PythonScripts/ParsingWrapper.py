@@ -64,18 +64,34 @@ class PrintJsonsResult:
 
 
 def load(ref_nodes_joiner: RefNodesJoiner, source_wrapper: BaseSourceWrapper,
-         parsing_config: ParsingConfig) -> LoadResult:
-    read_rows_result: ReadRowsResult = readRows(source_wrapper, parsing_config)
-    convert_rows_to_nodes_result: ConvertRowsToNodesResult = convertRowsToNodes(read_rows_result.rows_by_sheet_name)
-    nodes_layer: NodesLayer = NodesLayerBuilder.build(parsing_config.ordered_by_level_sheet_names,
-                                                      convert_rows_to_nodes_result.nodes_by_sheet_name)
-    joined_ref_nodes_result: JoinRefNodesResult = joinRefNodes(nodes_layer, ref_nodes_joiner)
+         parsing_config: Optional[ParsingConfig]) -> LoadResult:
+    nodes_by_feature_name: dict[str, Node]
+    read_rows_duration: float
+    convert_rows_to_nodes_duration: float
+    joined_ref_nodes_duration: float
+
+    if parsing_config is not None:
+        read_rows_result: ReadRowsResult = readRows(source_wrapper, parsing_config)
+        convert_rows_to_nodes_result: ConvertRowsToNodesResult = convertRowsToNodes(read_rows_result.rows_by_sheet_name)
+        nodes_layer: NodesLayer = NodesLayerBuilder.build(parsing_config.ordered_by_level_sheet_names,
+                                                          convert_rows_to_nodes_result.nodes_by_sheet_name)
+        joined_ref_nodes_result: JoinRefNodesResult = joinRefNodes(nodes_layer, ref_nodes_joiner)
+
+        nodes_by_feature_name = joined_ref_nodes_result.nodes_by_feature_name
+        read_rows_duration = read_rows_result.duration
+        convert_rows_to_nodes_duration = convert_rows_to_nodes_result.duration
+        joined_ref_nodes_duration = joined_ref_nodes_result.duration
+    else:
+        nodes_by_feature_name = {}
+        read_rows_duration = 0
+        convert_rows_to_nodes_duration = 0
+        joined_ref_nodes_duration = 0
 
     return LoadResult(
-        joined_ref_nodes_result.nodes_by_feature_name,
-        read_rows_result.duration,
-        convert_rows_to_nodes_result.duration,
-        joined_ref_nodes_result.duration
+        nodes_by_feature_name,
+        read_rows_duration,
+        convert_rows_to_nodes_duration,
+        joined_ref_nodes_duration
     )
 
 
