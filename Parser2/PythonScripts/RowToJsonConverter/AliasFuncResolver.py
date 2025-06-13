@@ -1,8 +1,10 @@
+from prettytable import PrettyTable
 from Configuration import FieldValueType
 from JsonAlias import Alias
 from RowToJsonConverter import AliasFuncNodesJoiner
 from RowToJsonConverter.AliasFunc import AliasFunc
 from RowToJsonConverter.Node import Node
+from Tests import LogFormatter
 
 
 class AliasFuncResolver:
@@ -31,5 +33,21 @@ class AliasFuncResolver:
             resolved_func_node = self.__alias_funcs_by_name[alias_func_name].resolve(alias_func_args)
             return AliasFuncNodesJoiner.join(feature_name, resolved_func_node, self, new_alias_func_stack)
         else:
-            print(f"Alias func not found '{alias_func_name}', args={alias_func_args}")
+            self.__LogMissingAliasFunc(feature_name, alias_func_name, alias_func_args)
             return Node(alias_func_name, str(alias_func_args), [])
+
+    @staticmethod
+    def __LogMissingAliasFunc(feature_name: str, alias_func_name: str, alias_func_args: dict[str, str]):
+        pretty_table = PrettyTable()
+        pretty_table.field_names = ['Parameter', 'Description']
+        pretty_table.align['Parameter'] = 'l'
+        pretty_table.align['Description'] = 'l'
+
+        pretty_table.add_row(["Feature name", feature_name], divider=True)
+        pretty_table.add_row(["Alias func name", LogFormatter.formatWarningColor(alias_func_name)], divider=True)
+        pretty_table.add_row(["Alias func args", alias_func_args], divider=True)
+
+        print(''.join([
+            f'\n\t{LogFormatter.formatWarning("Missing alias func")}',
+            f'\n{str(pretty_table)}'
+        ]))
