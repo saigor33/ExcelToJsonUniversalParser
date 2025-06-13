@@ -7,7 +7,7 @@
 	"selectedSourceType":"Excel",
 	"excelSource":
 	{
-		"excelFilePath": "../Example/Doc.xlsx",
+		"excelFilePath": "../Example/InstructionExamples.xlsx",
 		"aliasFuncsParsing":
 		{
 			"startParsingRowIndex": 3,
@@ -102,11 +102,47 @@
 	},
 	"jsonAliasesFilePaths":
 	[
-		"../Example/JsonAliases/Goods.json",
-		"../Example/JsonAliases/SeasonStage.json"
+		"../Example/JsonAliasFuncs/Goods.json",
+		"../Example/JsonAliasFuncs/Example3.3.1_ArgsVariations.json",
+		"../Example/JsonAliasFuncs/Example3.4Funcs.json"
 	],
 	"features":
 	[
+		{
+			"featureName": "example1",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example1.json"
+		},
+		{
+			"featureName": "example2",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example2.json"
+		},
+		{
+			"featureName": "example3.1",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.1.json"
+		},
+		{
+			"featureName": "example3.2",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.2.json"
+		},
+		{
+			"featureName": "example3.3",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.3.json"
+		},
+		{
+			"featureName": "example3.3.1",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.3.1.json"
+		},
+		{
+			"featureName": "example3.4",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.4.json"
+		},
 		{
 			"featureName": "season",
 			"outputDirectory": "../Example/Temp/Output",

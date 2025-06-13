@@ -1,0 +1,7 @@
+{
+	"SoftGood":
+	{
+		"$type":"GameplayConfigs.SoftGoodConfig",
+		"amount": "%amount:num%"
+	}
+}
