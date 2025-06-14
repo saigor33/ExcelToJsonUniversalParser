@@ -37,20 +37,7 @@ def _JoinInternal(
                 f"alias_func_name={alias_func_name}"
             )
 
-        alias_func_args: dict[str, str] = {}
-        duplicate_alias_func_arg_names: Optional[set[str]] = None
-        for arg_node in func_node.inner_nodes:
-            arg_name = arg_node.name
-            if arg_name in alias_func_args:
-                if duplicate_alias_func_arg_names is None:
-                    duplicate_alias_func_arg_names = set[str]()
-                duplicate_alias_func_arg_names.add(arg_name)
-            else:
-                alias_func_args[arg_name] = arg_node.value
-
-        if duplicate_alias_func_arg_names is not None:
-            _LogDuplicateAliasFuncArgNames(feature_name, node.name, alias_func_stack, alias_func_name,
-                                           duplicate_alias_func_arg_names)
+        alias_func_args = GetAliasFuncArgs(alias_func_name, alias_func_stack, feature_name, func_node, node)
 
         resolved_alias_func_node = alias_func_resolver.resolve(feature_name, alias_func_name, alias_func_args,
                                                                alias_func_stack)
@@ -61,6 +48,24 @@ def _JoinInternal(
         return node
     else:
         return node
+
+
+def GetAliasFuncArgs(alias_func_name, alias_func_stack, feature_name, func_node, node):
+    alias_func_args: dict[str, str] = {}
+    duplicate_alias_func_arg_names: Optional[set[str]] = None
+    for arg_node in func_node.inner_nodes:
+        arg_name = arg_node.name
+        if arg_name in alias_func_args:
+            if duplicate_alias_func_arg_names is None:
+                duplicate_alias_func_arg_names = set[str]()
+            duplicate_alias_func_arg_names.add(arg_name)
+        else:
+            alias_func_args[arg_name] = arg_node.value
+
+    if duplicate_alias_func_arg_names is not None:
+        _LogDuplicateAliasFuncArgNames(feature_name, node.name, alias_func_stack, alias_func_name,
+                                       duplicate_alias_func_arg_names)
+    return alias_func_args
 
 
 def _LogDuplicateAliasFuncArgNames(
