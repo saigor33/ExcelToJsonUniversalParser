@@ -177,24 +177,24 @@ def __LogTwiceAddAnonymArgs(sheet_name: str, start_block_visible_number: int, en
                             ignore_anonym_args_by_visible_number: dict[int, dict[str, str]]):
     pretty_table = PrettyTable()
     pretty_table.field_names = ['Parameter', 'Description']
-    pretty_table.align['Type'] = 'l'
-    pretty_table.add_row(["Sheet name", sheet_name], divider=True)
-    pretty_table.add_row(["Start block row number", start_block_visible_number], divider=True)
-    pretty_table.add_row(["End block row number", end_block_visible_number], divider=True)
-    pretty_table.add_row(["Applied anonym args from row number", applied_anonym_args_visible_number], divider=True)
+    pretty_table.align['Parameter'] = 'l'
+    pretty_table.add_row(['Sheet name', sheet_name], divider=True)
+    pretty_table.add_row(['Start block row number', start_block_visible_number], divider=True)
+    pretty_table.add_row(['End block row number', end_block_visible_number], divider=True)
+    pretty_table.add_row(['Applied anonym args from row number', applied_anonym_args_visible_number], divider=True)
 
     ignore_anonym_args_pretty_table = PrettyTable()
     ignore_anonym_args_pretty_table.field_names = ['Row number', 'Arg']
     for row_index, ignore_anonym_args in ignore_anonym_args_by_visible_number.items():
-        ignore_anonym_args_pretty_table.add_row([row_index, ignore_anonym_args], divider=True)
+        highlight_ignore_anonym_args = '\n'.join([LogFormatter.formatWarningColor(x) for x in ignore_anonym_args])
+        ignore_anonym_args_pretty_table.add_row([row_index, highlight_ignore_anonym_args], divider=True)
 
-    pretty_table.add_row(["Ignore anonym args", str(ignore_anonym_args_pretty_table)], divider=True)
+    pretty_table.add_row(['Ignore anonym args', str(ignore_anonym_args_pretty_table)], divider=True)
 
-    print("".join([
-        "\t"
-        f"{LogFormatter.formatWarningColor('Warning. Attempt added anonym args twice')}",
-        "\n"
-        f"{str(pretty_table)}"
+    print(''.join([
+        f'\n\t{LogFormatter.formatWarning("Attempt added anonym args twice")}',
+        f'\n\tDescription: duplicate anonym args will be ignored',
+        f'\n{str(pretty_table)}'
     ]))
 
 
