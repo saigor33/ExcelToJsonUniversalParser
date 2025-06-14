@@ -10,23 +10,52 @@ from Tests import LogFormatter
 def convert(sheet_name: str, rows: list[Row]) -> list[Node]:
     result: list[Node] = []
 
+    first_row_numbers_by_know_link_id: dict[str, int] = {}
+    duplicate_link_id_row_numbers_by_link_id: dict[str, list[int]] = {}
+
     start_block_row_index: int = 0
     row_index = start_block_row_index
     last_row_index = len(rows) - 1
     while row_index <= last_row_index:
+        node: Optional[Node] = None
         if row_index == last_row_index:
-            result.append(_CreateNode(sheet_name, rows, start_block_row_index, last_row_index))
+            node = _CreateNode(sheet_name, rows, start_block_row_index, last_row_index,
+                               first_row_numbers_by_know_link_id, duplicate_link_id_row_numbers_by_link_id)
         elif rows[row_index + 1].link_id is not None:
-            result.append(_CreateNode(sheet_name, rows, start_block_row_index, row_index))
+            node = _CreateNode(sheet_name, rows, start_block_row_index, row_index,
+                               first_row_numbers_by_know_link_id, duplicate_link_id_row_numbers_by_link_id)
             start_block_row_index = row_index + 1
+
+        if node is not None:
+            result.append(node)
+
         row_index += 1
+
+    if bool(duplicate_link_id_row_numbers_by_link_id):
+        _LogDuplicateLinKIds(sheet_name, first_row_numbers_by_know_link_id, duplicate_link_id_row_numbers_by_link_id)
 
     return result
 
 
-# todo: remove sheet name
-def _CreateNode(sheet_name: str, rows, start_block_row_index, end_block_row_index):
+def _CreateNode(
+        sheet_name: str,
+        rows,
+        start_block_row_index,
+        end_block_row_index,
+        first_row_numbers_by_know_link_id: dict[str, int],
+        duplicate_link_id_row_numbers_by_link_id: dict[str, list[int]]
+) -> Optional[Node]:
     node_name = rows[start_block_row_index].link_id
+    start_block_visible_number = rows[start_block_row_index].visible_number
+
+    if node_name not in first_row_numbers_by_know_link_id:
+        first_row_numbers_by_know_link_id[node_name] = start_block_visible_number
+    else:
+        if node_name not in duplicate_link_id_row_numbers_by_link_id:
+            duplicate_link_id_row_numbers_by_link_id[node_name] = []
+        duplicate_link_id_row_numbers_by_link_id[node_name].append(start_block_visible_number)
+        return None
+
     inner_nodes: list[Node] = []
 
     block_row_index = start_block_row_index
@@ -115,6 +144,7 @@ def __IsEmptyLinkIdBlock(row: Row):
         and row.alias_func_arg_value is None \
         and row.anonym_args is None
 
+
 def __LogEmptyTypeRow(sheet_name: str, row_visible_number: int, row: Row):
     pretty_table = PrettyTable()
     pretty_table.field_names = ['Parameter', 'Description']
@@ -165,4 +195,29 @@ def __LogTwiceAddAnonymArgs(sheet_name: str, start_block_visible_number: int, en
         f"{LogFormatter.formatWarningColor('Warning. Attempt added anonym args twice')}",
         "\n"
         f"{str(pretty_table)}"
+    ]))
+
+
+def _LogDuplicateLinKIds(sheet_name: str, first_row_numbers_by_know_link_id: dict[str, int],
+                         duplicate_link_id_row_numbers_by_link_id: dict[str, list[int]]):
+    pretty_table = PrettyTable()
+    pretty_table.field_names = ['Sheet name', 'Duplicate link id']
+    pretty_table.align['Sheet name'] = 'l'
+
+    duplicate_link_ids_pretty_table = PrettyTable()
+    duplicate_link_ids_pretty_table.field_names = ['id', 'Row numbers']
+    duplicate_link_ids_pretty_table.align['Row numbers'] = 'r'
+
+    for link_id, row_numbers in duplicate_link_id_row_numbers_by_link_id.items():
+        highlight_link_id = LogFormatter.formatWarningColor(link_id)
+        first_row_number = first_row_numbers_by_know_link_id[link_id]
+        row_numbers_text = '\n'.join([str(first_row_number)] + [str(x) for x in row_numbers])
+        duplicate_link_ids_pretty_table.add_row([highlight_link_id, row_numbers_text], divider=True)
+
+    pretty_table.add_row([sheet_name, str(duplicate_link_ids_pretty_table)], divider=True)
+
+    print(''.join([
+        f'\n\t{LogFormatter.formatWarning("Duplicate link id")}',
+        f'\n\tDescription: duplicate blocks with link id will be ignored',
+        f'\n{str(pretty_table)}'
     ]))
