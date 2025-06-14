@@ -16,7 +16,7 @@ class AliasFuncResolver:
         self.__json_aliases = json_aliases
 
     def resolve(self, feature_name: str, alias_func_name: str, alias_func_args: dict[str, str],
-                alias_func_stack: list[str]) -> Node:
+                alias_func_stack: list[str], root_field_names_stack: list[str], current_root_field_name) -> Node:
         if alias_func_name in alias_func_stack:
             self.__LogInfiniteLoopAliasFunc(feature_name, alias_func_name, alias_func_stack)
             return Node(alias_func_name, str(alias_func_args), [])
@@ -29,8 +29,10 @@ class AliasFuncResolver:
             return Node(None, None, [inner_node])
         elif alias_func_name in self.__alias_funcs_by_name:
             new_alias_func_stack: list[str] = alias_func_stack + [alias_func_name]
-            resolved_func_node = self.__alias_funcs_by_name[alias_func_name].resolve(alias_func_args)
-            return AliasFuncNodesJoiner.join(feature_name, resolved_func_node, self, new_alias_func_stack)
+            alias_func: AliasFunc = self.__alias_funcs_by_name[alias_func_name]
+            resolved_func_node = alias_func.resolve(alias_func_args, root_field_names_stack, current_root_field_name)
+            return AliasFuncNodesJoiner.join(feature_name, resolved_func_node, self, new_alias_func_stack,
+                                             root_field_names_stack, current_root_field_name)
         else:
             self.__LogMissingAliasFunc(feature_name, alias_func_name, alias_func_args)
             return Node(alias_func_name, str(alias_func_args), [])

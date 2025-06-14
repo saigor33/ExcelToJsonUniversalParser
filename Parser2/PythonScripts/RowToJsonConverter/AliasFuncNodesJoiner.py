@@ -11,16 +11,21 @@ def join(
         feature_name: str,
         node: Node,
         alias_func_resolver: AliasFuncResolver,
-        alias_func_stack: list[str]
+        alias_func_stack: list[str],
+        root_field_names_stack: list[str],
+        current_root_field_name: str
 ) -> Node:
-    return _JoinInternal(feature_name, node, alias_func_resolver, alias_func_stack)
+    return _JoinInternal(feature_name, node, alias_func_resolver, alias_func_stack, root_field_names_stack,
+                         current_root_field_name)
 
 
 def _JoinInternal(
         feature_name: str,
         node: Node,
         alias_func_resolver: AliasFuncResolver,
-        alias_func_stack: list[str]
+        alias_func_stack: list[str],
+        root_field_names_stack: list[str],
+        current_root_field_name: str
 ) -> Node:
     if node.value == Configuration.ReferenceType.AliasFunc:
         if node.inner_nodes is None:
@@ -39,12 +44,17 @@ def _JoinInternal(
 
         alias_func_args = GetAliasFuncArgs(alias_func_name, alias_func_stack, feature_name, func_node, node)
 
-        resolved_alias_func_node = alias_func_resolver.resolve(feature_name, alias_func_name, alias_func_args,
-                                                               alias_func_stack)
+        resolved_alias_func_node = \
+            alias_func_resolver.resolve(feature_name, alias_func_name, alias_func_args, alias_func_stack,
+                                        root_field_names_stack, current_root_field_name)
         return Node(node.name, resolved_alias_func_node.value, resolved_alias_func_node.inner_nodes)
     elif node.inner_nodes is not None:
         for index, inner_node in enumerate(node.inner_nodes):
-            node.inner_nodes[index] = _JoinInternal(feature_name, inner_node, alias_func_resolver, alias_func_stack)
+            new_root_field_names_stack = root_field_names_stack + [current_root_field_name]
+            new_current_root_field_name = inner_node.name  # todo: can be Configuration.ReferenceType.AliasFunc
+            node.inner_nodes[index] = \
+                _JoinInternal(feature_name, inner_node, alias_func_resolver, alias_func_stack,
+                              new_root_field_names_stack, new_current_root_field_name)
         return node
     else:
         return node

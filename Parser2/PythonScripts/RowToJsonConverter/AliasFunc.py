@@ -9,13 +9,13 @@ class AliasFunc:
     def __init__(self, node: Node):
         self.__node = node
 
-    def resolve(self, args: dict[str, str]) -> Node:
+    def resolve(self, args: dict[str, str], root_field_names_stack: list[str], current_root_field_name: str) -> Node:
         missing_arg_name_by_path: dict[str, str] = {}
         field_names_stack: list[str] = []
         result_node = self._ResolveInternal(self.__node, args, missing_arg_name_by_path, field_names_stack)
 
         if bool(missing_arg_name_by_path):
-            self._LogMissingArgs(missing_arg_name_by_path)
+            self._LogMissingArgs(missing_arg_name_by_path, root_field_names_stack, current_root_field_name)
 
         return result_node
 
@@ -58,22 +58,24 @@ class AliasFunc:
         else:
             return value
 
-    def _LogMissingArgs(self, missing_arg_name_by_path: dict[str, str]):
+    def _LogMissingArgs(self, missing_arg_name_by_path: dict[str, str], root_field_names_stack: list[str],
+                        current_root_field_name: str):
         pretty_table = PrettyTable()
-        pretty_table.field_names = ['Alias func name', 'Missing arg']
+        pretty_table.field_names = ['Alias func name', 'Feature fields stack', 'Missing arg']
         pretty_table.align['Alias func name'] = 'l'
+        pretty_table.align['Feature fields stack'] = 'l'
 
         missing_args_pretty_table = PrettyTable()
         missing_args_pretty_table.field_names = ['Arg name', 'Fields stack']
         missing_args_pretty_table.align['Arg name'] = 'l'
-        missing_args_pretty_table.align['Fields stack'] = 'L'
+        missing_args_pretty_table.align['Fields stack'] = 'l'
 
         for arg_name, fields_path in missing_arg_name_by_path.items():
             missing_args_pretty_table.add_row([LogFormatter.formatWarningColor(arg_name), fields_path], divider=True)
 
-        # todo: add parsing fields stack
         alias_func_name = self.__node.name
-        pretty_table.add_row([alias_func_name, str(missing_args_pretty_table)])
+        root_field_names_stack = AliasFuncStackLogFormatter.stackFormat(root_field_names_stack, current_root_field_name)
+        pretty_table.add_row([alias_func_name, root_field_names_stack, str(missing_args_pretty_table)])
 
         print(''.join([
             f'\n\t{LogFormatter.formatWarning("Missing alias func args")}',

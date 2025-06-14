@@ -104,7 +104,11 @@ def resolveAliasFuncs(
     prepared_nodes_by_feature: dict[str, Node] = {}
     for feature_name, node in nodes_by_feature_name.items():
         alias_func_stack = []
-        prepared_node = AliasFuncNodesJoiner.join(feature_name, node, alias_func_resolver, alias_func_stack)
+
+        root_field_names_stack: list[str] = []
+        current_root_field_name: str = feature_name
+        prepared_node = AliasFuncNodesJoiner.join(feature_name, node, alias_func_resolver, alias_func_stack,
+                                                  root_field_names_stack, current_root_field_name)
         prepared_nodes_by_feature[feature_name] = prepared_node
 
     duration: float = time.time() - start_time
