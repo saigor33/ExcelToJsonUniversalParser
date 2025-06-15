@@ -14,7 +14,15 @@ def read(excel_file_path: str, parsing_config: ParsingConfig) -> dict[str, list[
 
     for sheet_name in parsing_config.ordered_by_level_sheet_names:
         if sheet_name in excel_file.sheet_names:
-            excel_sheet_data_frame = excel_file.parse(sheet_name, index_col=None, na_values='', keep_default_na=False)
+            # na_values='', keep_default_na=False - fixed read "null" as None
+            # dtype=str - fixed read int number as float (in column must be only numbers)
+            excel_sheet_data_frame = excel_file.parse(
+                sheet_name,
+                index_col=None,
+                na_values='',
+                keep_default_na=False,
+                dtype=str
+            )
             rows_by_sheet_name[sheet_name] = _ReadRows(sheet_name, excel_sheet_data_frame, parsing_config)
         else:
             if missing_sheet_names is None:
