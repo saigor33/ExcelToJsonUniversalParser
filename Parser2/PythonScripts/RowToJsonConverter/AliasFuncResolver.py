@@ -35,7 +35,12 @@ class AliasFuncResolver:
         elif alias_func_name in self.__alias_funcs_by_name:
             new_alias_func_stack: list[str] = alias_func_stack + [alias_func_name]
             alias_func: AliasFunc = self.__alias_funcs_by_name[alias_func_name]
-            resolved_func_node = alias_func.resolve(alias_func_args, root_field_names_stack, current_root_field_name)
+            resolved_func_node = alias_func.resolve(
+                alias_func_args,
+                alias_func_stack,
+                root_field_names_stack,
+                current_root_field_name
+            )
             return AliasFuncNodesJoiner.join(feature_name, resolved_func_node, self, new_alias_func_stack,
                                              root_field_names_stack, current_root_field_name)
         else:

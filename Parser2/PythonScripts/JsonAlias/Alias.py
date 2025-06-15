@@ -1,7 +1,5 @@
-from RowToJsonConverter import AliasFuncStackLogFormatter
-from Tests import LogFormatter
+from AliasFuncs import Logger
 from typing import Optional
-from prettytable import PrettyTable
 
 
 class Item:
@@ -31,11 +29,10 @@ class Alias:
             current_root_field_name: str
     ) -> str:
         used_arg_names: set[str] = set()
-        unused_arg_names: Optional[set[str]] = None
-        missing_arg_names: Optional[set[str]] = None
+        missing_arg_names_by_path: Optional[dict[str, str]] = None
 
         texts: list[str] = []
-        for item in self.items:
+        for i, item in enumerate(self.items):
             item_type = type(item)
             if item_type == ArgItem:
                 arg_item: ArgItem = item
@@ -43,61 +40,26 @@ class Alias:
                     used_arg_names.add(arg_item.arg_name)
                     texts.append(alias_func_args[arg_item.arg_name])
                 else:
-                    if missing_arg_names is None:
-                        missing_arg_names = set()
-                    missing_arg_names.add(arg_item.arg_name)
+                    if missing_arg_names_by_path is None:
+                        missing_arg_names_by_path = {}
+                    missing_arg_names_by_path[f'<unknown_stack_{i}>'] = arg_item.arg_name
             elif item_type == TextItem:
                 text_item: TextItem = item
                 texts.append(text_item.text)
             else:
                 raise Exception("Unknown item type", item_type, item)
 
-        for arg_name, arg_value in alias_func_args.items():
-            if arg_name not in used_arg_names:
-                if unused_arg_names is None:
-                    unused_arg_names = set()
-                unused_arg_names.add(arg_name)
-
-        if missing_arg_names is not None or unused_arg_names is not None:
-            self.__LogInvalidArgs(missing_arg_names, unused_arg_names, alias_func_stack, root_field_names_stack,
-                                  current_root_field_name)
+        unused_arg_names: dict[str, str] = {k: v for k, v in alias_func_args.items() if k not in used_arg_names}
+        if bool(missing_arg_names_by_path) or bool(unused_arg_names):
+            current_alias_func = self.name
+            Logger.logInvalidArgs(
+                missing_arg_names_by_path,
+                unused_arg_names,
+                alias_func_stack,
+                current_alias_func,
+                root_field_names_stack,
+                current_root_field_name
+            )
 
         join = ''.join(texts)
         return join.replace('\'', '"')
-
-    def __LogInvalidArgs(
-            self,
-            missing_arg_names: Optional[set[str]],
-            unused_arg_names: Optional[set[str]],
-            alias_func_stack: list[str],
-            root_field_names_stack: list[str],
-            current_root_field_name: str
-    ):
-        pretty_table = PrettyTable()
-        pretty_table.field_names = ['Fields stack', 'Funcs stack', 'Invalid args']
-        pretty_table.align['Fields stack'] = 'l'
-        pretty_table.align['Funcs stack'] = 'l'
-        invalid_types_pretty_table = Alias.__FormatInvalidArgs(missing_arg_names, unused_arg_names)
-
-        root_field_names_stack = AliasFuncStackLogFormatter.stackFormat(root_field_names_stack, current_root_field_name)
-        formated_alias_func_stack = AliasFuncStackLogFormatter.stackFormat(alias_func_stack, self.name)
-        pretty_table.add_row([root_field_names_stack, formated_alias_func_stack, str(invalid_types_pretty_table)],
-                             divider=True)
-
-        print("".join([
-            f"\n\t{LogFormatter.formatWarning('Invalid json alias func args detect')}"
-            f"\n{str(pretty_table)}"
-        ]))
-
-    @staticmethod
-    def __FormatInvalidArgs(missing_arg_names: Optional[set[str]], unused_arg_names: Optional[set[str]]):
-        pretty_table = PrettyTable()
-        pretty_table.field_names = ['Type', 'Name']
-        pretty_table.align['Type'] = 'l'
-        if missing_arg_names is not None:
-            highlight_missing_arg_names = '\n'.join([LogFormatter.formatWarningColor(x) for x in missing_arg_names])
-            pretty_table.add_row(['Missing args', highlight_missing_arg_names], divider=True)
-        if unused_arg_names is not None:
-            highlight_unused_arg_names = '\n'.join([LogFormatter.formatWarningColor(x) for x in unused_arg_names])
-            pretty_table.add_row(['Unused args', highlight_unused_arg_names], divider=True)
-        return pretty_table
