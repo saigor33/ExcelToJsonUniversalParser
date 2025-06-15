@@ -16,7 +16,7 @@ class AliasFuncResolver:
         self.__json_aliases = json_aliases
 
     def resolve(self, feature_name: str, alias_func_name: str, alias_func_args: dict[str, str],
-                alias_func_stack: list[str], root_field_names_stack: list[str], current_root_field_name) -> Node:
+                alias_func_stack: list[str], root_field_names_stack: list[str], current_root_field_name: str) -> Node:
         if alias_func_name in alias_func_stack:
             self.__LogInfiniteLoopAliasFunc(feature_name, alias_func_name, alias_func_stack)
             return Node(alias_func_name, str(alias_func_args), [])
@@ -24,7 +24,12 @@ class AliasFuncResolver:
         if alias_func_name in self.__json_aliases:
             # todo: convert json text to Nodes
             json_alias: Alias = self.__json_aliases[alias_func_name]
-            node_value = json_alias.resolve(alias_func_args, alias_func_stack)
+            node_value = json_alias.resolve(
+                alias_func_args,
+                alias_func_stack,
+                root_field_names_stack,
+                current_root_field_name
+            )
             inner_node = Node(FieldValueType.JsonAlias, node_value, None)
             return Node(None, None, [inner_node])
         elif alias_func_name in self.__alias_funcs_by_name:
