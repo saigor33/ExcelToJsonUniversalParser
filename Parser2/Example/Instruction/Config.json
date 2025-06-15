@@ -25,6 +25,12 @@
 			"fieldValueTypeColumnName":"type",
 			"fieldValueColumnName":"value",
 			"aliasFuncArgValueColumnName": "aliasFuncArg",
+			"anonymAliasFuncArgNameByColumnName":
+			{
+				"arg1": "arg1",
+				"arg2": "arg2",
+				"arg3": "arg3"
+			},
 			"orderedByLevelSheetNames":
 			[
 				"Lvl0",
@@ -36,6 +42,11 @@
 	"googleSheetsSource":
 	{
 	},
+	"jsonAliasesFilePaths":
+	[
+		"../Example/Instruction/JsonAliasFuncs/Goods.json",
+		"../Example/Instruction/JsonAliasFuncs/Example3.4Funcs.json"
+	],
 	"features":
 	[
 		{
@@ -57,6 +68,16 @@
 			"featureName": "example3.2",
 			"outputDirectory": "../Example/Temp/Output",
 			"outputFileName": "Example3.2.json"
+		},
+		{
+			"featureName": "example3.3",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.3.json"
+		},
+		{
+			"featureName": "example3.4",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.4.json"
 		}
 	]
 }

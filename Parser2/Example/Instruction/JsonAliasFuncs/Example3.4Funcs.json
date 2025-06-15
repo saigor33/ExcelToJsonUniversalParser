@@ -1,0 +1,8 @@
+{
+	"Example3.4_jsonFunc":
+	{
+		"field1": "%arg1%",
+		"field2": "%arg2%",
+		"field3": "%arg3%"
+	}
+}

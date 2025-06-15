@@ -7,7 +7,7 @@
 	"SoftGood":
 	{
 		"$type":"Common.GameplayConfigs.Player.SoftGoodConfig",
-		"amount": 50
+		"amount": "%amount%"
 	},
 	"ConstantExample": 12000,
 	"HardGoodWithAnonymArg":
