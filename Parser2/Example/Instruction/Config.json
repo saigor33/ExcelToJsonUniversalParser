@@ -3,6 +3,19 @@
 	"excelSource":
 	{
 		"excelFilePath": "../Example/Instruction/Instruction.xlsx",
+		"aliasFuncsParsing":
+		{
+			"startParsingRowIndex": 3,
+			"ignoreColumnName": "ignore",
+			"linkIdColumnName": "funcId",
+			"fieldNameColumnName":"name",
+			"fieldValueTypeColumnName":"type",
+			"fieldValueColumnName":"value",
+			"orderedByLevelSheetNames":
+			[
+				"AliasFuncsLvl0"
+			]
+		},
 		"featuresParsing": 
 		{
 			"startParsingRowIndex": 3,
@@ -11,6 +24,7 @@
 			"fieldNameColumnName":"name",
 			"fieldValueTypeColumnName":"type",
 			"fieldValueColumnName":"value",
+			"aliasFuncArgValueColumnName": "aliasFuncArg",
 			"orderedByLevelSheetNames":
 			[
 				"Lvl0",
@@ -33,6 +47,16 @@
 			"featureName": "example2",
 			"outputDirectory": "../Example/Temp/Output",
 			"outputFileName": "Example2.json"
+		},
+		{
+			"featureName": "example3.1",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.1.json"
+		},
+		{
+			"featureName": "example3.2",
+			"outputDirectory": "../Example/Temp/Output",
+			"outputFileName": "Example3.2.json"
 		}
 	]
 }

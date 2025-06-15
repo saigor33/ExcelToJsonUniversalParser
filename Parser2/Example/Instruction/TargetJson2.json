@@ -1,0 +1,23 @@
+{
+	"good1":
+	{
+		"$type":"GameplayConfigs.HardGoodConfig",
+		"amount": 100
+	},
+	"good2":
+	{
+		"$type":"GameplayConfigs.HardGoodConfig",
+		"amount": 350
+	},
+	"goods":
+	[
+		{
+			"$type":"GameplayConfigs.HardGoodConfig",
+			"amount": 1250
+		},
+		{
+			"$type":"GameplayConfigs.HardGoodConfig",
+			"amount": 500
+		},
+	]
+}
