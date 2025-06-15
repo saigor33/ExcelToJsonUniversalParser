@@ -5,13 +5,19 @@ from RowToJsonConverter.Node import Node
 
 
 def convert(node: Node) -> BaseJsonItem:
-    # todo: check array
+    is_array = \
+        node.inner_nodes is not None \
+        and len(node.inner_nodes) == 1 \
+        and node.inner_nodes[0].value == Configuration.ReferenceType.Array
+
+    node_to_convert: Node = node.inner_nodes[0] if is_array else node
+
     inner_json_items: list[BaseJsonItem] = []
-    if node.inner_nodes is not None:
-        for index, inner_node in enumerate(node.inner_nodes):
+    if node_to_convert.inner_nodes is not None:
+        for index, inner_node in enumerate(node_to_convert.inner_nodes):
             inner_json_items.append(_ConvertInternal(inner_node))
 
-    return ObjectJsonItem(None, False, inner_json_items)
+    return ObjectJsonItem(None, is_array, inner_json_items)
 
 
 def _ConvertInternal(node: Node) -> BaseJsonItem:
