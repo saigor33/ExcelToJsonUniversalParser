@@ -84,6 +84,7 @@ def _CreateNode(
             sub_inner_nodes: list[Node] = []
             start_sub_block_visible_number = rows[block_row_index].visible_number
 
+            # Exclude twice add anonym args for block
             applied_anonym_args_visible_number: Optional[int] = None
             ignore_anonym_args_by_visible_number: Optional[dict[int, dict[str, str]]] = None
             while True:
@@ -100,8 +101,9 @@ def _CreateNode(
 
                 alias_func_arg_name = sub_block_row.field_value
                 alias_func_arg_value = sub_block_row.alias_func_arg_value
-
-                sub_inner_nodes.append(Node(alias_func_arg_name, alias_func_arg_value, None))
+                has_arg = alias_func_arg_name is not None or alias_func_arg_value is not None
+                if has_arg:
+                    sub_inner_nodes.append(Node(alias_func_arg_name, alias_func_arg_value, None))
 
                 if _IsSubBlockEnded(block_row_index, end_block_row_index, rows):
                     break
