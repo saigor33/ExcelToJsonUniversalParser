@@ -11,6 +11,10 @@ Function InstallPythonModule {
 }
 
 $ErrorActionPreference = "Inquire"
+
+# Fix execute PowerShell policy
+& "$PSScriptRoot/FixExecutePowerShellPolicy.ps1"
+
 $installationSubScriptsPath = "./InstallationSubScripts/"
 
 if(-not(Test-Path -Path $installationSubScriptsPath))

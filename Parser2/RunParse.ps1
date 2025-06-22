@@ -1,3 +1,6 @@
+# Fix execute PowerShell policy
+& "$PSScriptRoot/FixExecutePowerShellPolicy.ps1"
+
 # Set Envarament variables
 & "$PSScriptRoot/SetEnvaramentVariables.ps1"
 
