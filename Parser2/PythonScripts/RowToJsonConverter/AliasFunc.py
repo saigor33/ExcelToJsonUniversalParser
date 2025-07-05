@@ -69,7 +69,7 @@ class AliasFunc:
                 return args[arg_name]
             else:
                 field_name_stack = AliasFuncStackLogFormatter.stackFormat(field_names_stack, current_field_name)
-                missing_arg_name_by_path[arg_name] = field_name_stack
+                missing_arg_name_by_path[field_name_stack] = arg_name
                 return arg_name
         else:
             return value
