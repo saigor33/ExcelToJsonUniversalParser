@@ -1,2 +1,0 @@
-LayerDelimiter = "$ld"
-Array = "$arr"
